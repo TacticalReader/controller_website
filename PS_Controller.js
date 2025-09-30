@@ -1,61 +1,216 @@
+// Controller Website JavaScript - Enhanced Version
 
-        const loadImage = ["ps4-controller-png-42098.png","ps4-controller-png-42099.png","ps4-controller-png-42109.png"]
+// Image array for controller colors
+const loadImage = [
+    "ps4-controller-png-42098.png", // Black
+    "ps4-controller-png-42099.png", // White  
+    "ps4-controller-png-42109.png"  // Red
+];
 
-        const changeImage = document.querySelector(".second-section .interactive-image .colours");
+// Get DOM elements
+const changeImage = document.querySelector(".second-section .interactive-image .colours");
+const buttons = document.querySelectorAll(".second-section .colours-button button");
+const loginContainer = document.getElementById('login-container');
+const loginBtn = document.getElementById('login-btn');
 
-        console.log(changeImage);
-
-        const buttons = document.querySelectorAll(".second-section .colours-button button");
-
-        console.log(buttons);
+// Enhanced color changing functionality with smoother animations
+function setupColorButtons() {
+    buttons.forEach((button, index) => {
+        // Add mouseover events for color changes
+        button.addEventListener('mouseover', () => {
+            changeControllerColor(index);
+        });
         
-
-        buttons[0].addEventListener('mouseover' , () => {
-
-             let settingAttribute = changeImage.setAttribute("src",loadImage[0]);
-
-             changeImage.style.transform = "translateY(" + (-50) + "px)";
-
-             changeImage.style.transition = "1.2s";
-
-              console.log(settingAttribute);
+        // Add click events for more responsive interaction
+        button.addEventListener('click', () => {
+            changeControllerColor(index);
+            // Add active state feedback
+            buttons.forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
         });
-
-        buttons[1].addEventListener('mouseover' , eventSecond)
-
-          function eventSecond() {
-
-             let settingAttribute = changeImage.setAttribute("src",loadImage[1]);
-
-             changeImage.style.transform = "translateY(" + (-50) + "px)";
-
-             changeImage.style.transition = "1.2s";
-
-              console.log(settingAttribute);
-        };
-           
-
-        buttons[2].addEventListener('mouseover' , () => {
-
-             let settingAttribute = changeImage.setAttribute("src",loadImage[2]);
-
-             changeImage.style.transform = "translateY(" + (-50) + "px)";
-
-             changeImage.style.transition = "1.2s";
-             
-              console.log(settingAttribute);
+        
+        // Add focus events for keyboard accessibility
+        button.addEventListener('focus', () => {
+            changeControllerColor(index);
         });
+    });
+}
 
+// Enhanced color changing function with better animations
+function changeControllerColor(colorIndex) {
+    if (changeImage && colorIndex < loadImage.length) {
+        // Add loading state
+        changeImage.style.opacity = '0.7';
+        changeImage.style.transform = 'translateY(-30px) scale(0.95)';
+        
+        setTimeout(() => {
+            changeImage.setAttribute("src", loadImage[colorIndex]);
+            
+            // Smooth return animation
+            setTimeout(() => {
+                changeImage.style.opacity = '1';
+                changeImage.style.transform = 'translateY(-10px) scale(1)';
+            }, 100);
+        }, 200);
+    }
+}
 
-      function loginForm(){
-            let display = document.getElementById('login-container').style.display;
-            if (display===""){
-                  document.getElementById('login-btn').innerHTML = "Close Form";
-                  document.getElementById('login-container').style.display="block";
+// Enhanced login form functionality
+function loginForm() {
+    const display = window.getComputedStyle(loginContainer).display;
+    
+    if (display === "none" || display === "") {
+        // Show login form
+        loginBtn.innerHTML = "Close Form";
+        loginContainer.style.display = "flex";
+        
+        // Add fade in effect
+        setTimeout(() => {
+            loginContainer.style.opacity = "1";
+        }, 10);
+        
+        // Prevent body scrolling when modal is open
+        document.body.style.overflow = "hidden";
+    } else {
+        // Hide login form
+        loginBtn.innerHTML = "Log In";
+        loginContainer.style.opacity = "0";
+        
+        setTimeout(() => {
+            loginContainer.style.display = "none";
+            document.body.style.overflow = "auto";
+        }, 300);
+    }
+}
 
+// Add escape key functionality to close login form
+function handleEscapeKey(event) {
+    if (event.key === 'Escape' && loginContainer.style.display === 'flex') {
+        loginForm();
+    }
+}
+
+// Click outside to close modal functionality
+function handleOutsideClick(event) {
+    if (event.target === loginContainer) {
+        loginForm();
+    }
+}
+
+// Smooth scrolling for navigation links
+function setupSmoothScrolling() {
+    const navLinks = document.querySelectorAll('header ul li');
+    
+    navLinks.forEach((link, index) => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            
+            // Define scroll targets
+            const targets = [
+                document.querySelector('.container'), // Home
+                document.querySelector('section'),    // Product
+                document.querySelector('.second-section') // News
+            ];
+            
+            if (targets[index]) {
+                targets[index].scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
             }
-            else{
-                  document.getElementById('login-btn').innerHTML = "Log In";
-                  document.getElementById('login-container').style.display="";
+        });
+    });
+}
+
+// Enhanced hamburger menu functionality
+function setupMobileMenu() {
+    const hamburgerMenu = document.querySelector('.hamburger-menu');
+    const navMenu = document.querySelector('header ul');
+    let isMenuOpen = false;
+    
+    if (hamburgerMenu) {
+        hamburgerMenu.addEventListener('click', () => {
+            isMenuOpen = !isMenuOpen;
+            
+            if (isMenuOpen) {
+                navMenu.style.opacity = '1';
+                navMenu.style.pointerEvents = 'all';
+                hamburgerMenu.classList.add('active');
+            } else {
+                navMenu.style.opacity = '0';
+                navMenu.style.pointerEvents = 'none';
+                hamburgerMenu.classList.remove('active');
             }
-      }
+        });
+    }
+}
+
+// Add loading animation for images
+function setupImageLoading() {
+    const images = document.querySelectorAll('img');
+    
+    images.forEach(img => {
+        img.addEventListener('load', () => {
+            img.style.opacity = '1';
+        });
+        
+        // Set initial opacity for fade-in effect
+        img.style.opacity = '0';
+        img.style.transition = 'opacity 0.5s ease';
+    });
+}
+
+// Add scroll-based animations
+function setupScrollAnimations() {
+    const cards = document.querySelectorAll('.card-one, .card-two, .card-three');
+    
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
+    }, observerOptions);
+    
+    cards.forEach(card => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(50px)';
+        card.style.transition = 'all 0.6s ease';
+        observer.observe(card);
+    });
+}
+
+// Initialize all functionality when DOM is loaded
+function initializeWebsite() {
+    console.log('PS4 Controller Website - Enhanced Version Loaded');
+    
+    // Setup all interactive features
+    setupColorButtons();
+    setupSmoothScrolling();
+    setupMobileMenu();
+    setupImageLoading();
+    setupScrollAnimations();
+    
+    // Add event listeners
+    document.addEventListener('keydown', handleEscapeKey);
+    loginContainer.addEventListener('click', handleOutsideClick);
+    
+    // Add CSS for better login container opacity
+    loginContainer.style.transition = 'opacity 0.3s ease';
+    loginContainer.style.opacity = '0';
+    
+    console.log('All enhancements loaded successfully!');
+}
+
+// Start initialization when DOM is fully loaded
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeWebsite);
+} else {
+    initializeWebsite();
+}
