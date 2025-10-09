@@ -105,6 +105,17 @@ header ul li:hover {
     background-color: var(--accent);
 }
 
+/* Hamburger menu animation when active */
+.hamburger-menu.active span:nth-child(1) {
+    transform: rotate(-45deg) translate(-5px, 6px);
+}
+.hamburger-menu.active span:nth-child(2) {
+    opacity: 0;
+}
+.hamburger-menu.active span:nth-child(3) {
+    transform: rotate(45deg) translate(-5px, -6px);
+}
+
 .container{
     width: 100%;
     padding: 130px 0;
@@ -559,27 +570,51 @@ section .card-one p, section .card-two p, section .card-three p{
         font-size: 1.2rem;
     }
 
+    /* CLEAN WHITE MOBILE MENU - No Dark Background */
     header ul{
-        background: linear-gradient(rgb(0, 0, 0),rgb(14, 13, 13));
+        background: white; /* Clean white background */
         position: fixed;
         top: 0;
-        left: 0;
-        width: 100%;
+        right: -100%; /* Start off-screen */
+        width: 300px; /* Sidebar width */
         height: 100%;
         flex-direction: column;
-        justify-content: center;
-        align-items: center;
+        justify-content: flex-start;
+        align-items: flex-start;
+        padding-top: 80px;
         pointer-events: none;
         opacity: 0;
+        transition: all 0.3s ease;
+        box-shadow: -5px 0 15px rgba(0,0,0,0.2);
+        z-index: 999998;
+    }
+
+    /* Active state for mobile menu */
+    header ul.menu-open {
+        right: 0; /* Slide in from right */
+        opacity: 1;
+        pointer-events: all;
     }
 
     header ul li{
         list-style-type: none;
         margin-right: 0px;
-        padding-top: 80px;
-        font-size: large;
+        padding: 20px 30px;
+        font-size: 1.2rem;
+        color: var(--secondary); /* Dark text on white background */
+        width: 100%;
+        text-align: left;
+        border-bottom: 1px solid #eee;
+        transition: all 0.3s ease;
+    }
+    
+    header ul li:hover {
+        color: var(--accent);
+        background: #f8f9fa;
+        padding-left: 40px;
     }
 
+    /* Show hamburger menu on mobile */
     .hamburger-menu{
         display: flex;
         flex-direction: column;
@@ -587,6 +622,7 @@ section .card-one p, section .card-two p, section .card-three p{
         align-items: center;
         z-index: 9999;
         opacity: 1;
+        position: relative;
     }
 
     .container{
@@ -664,6 +700,15 @@ section .card-one p, section .card-two p, section .card-three p{
         font-family: Arial, Helvetica, sans-serif;
         padding: 8px 12px;
     }
+
+    header ul{
+        width: 250px; /* Smaller width for very small screens */
+    }
+
+    header ul li{
+        font-size: 1rem;
+        padding: 15px 20px;
+    }
 }
 
 @media only screen and (max-width: 195px){
@@ -697,5 +742,9 @@ section .card-one p, section .card-two p, section .card-three p{
         font-weight: lighter;
         font-family: Arial, Helvetica, sans-serif;
         padding: 6px 8px;
+    }
+
+    header ul{
+        width: 200px;
     }
 }
