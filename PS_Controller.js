@@ -1,4 +1,4 @@
-// Controller Website JavaScript - Enhanced Version with Fixed Hamburger Menu
+// Controller Website JavaScript - Enhanced Version with Clean White Sidebar Menu
 
 // Image array for controller colors
 const loadImage = [
@@ -122,7 +122,7 @@ function setupSmoothScrolling() {
     });
 }
 
-// FIXED: Enhanced hamburger menu functionality with correct logic
+// UPDATED: Clean white sidebar menu functionality
 function setupMobileMenu() {
     const hamburgerMenu = document.querySelector('.hamburger-menu');
     const navMenu = document.querySelector('header ul');
@@ -133,19 +133,17 @@ function setupMobileMenu() {
             isMenuOpen = !isMenuOpen;
             
             if (isMenuOpen) {
-                // SHOW menu
-                navMenu.style.opacity = '1';
-                navMenu.style.pointerEvents = 'all';
+                // SHOW sidebar menu
+                navMenu.classList.add('menu-open');
                 hamburgerMenu.classList.add('active');
                 document.body.style.overflow = 'hidden'; // Prevent background scrolling
-                console.log('Menu opened');
+                console.log('Sidebar menu opened');
             } else {
-                // HIDE menu
-                navMenu.style.opacity = '0';
-                navMenu.style.pointerEvents = 'none';
+                // HIDE sidebar menu
+                navMenu.classList.remove('menu-open');
                 hamburgerMenu.classList.remove('active');
                 document.body.style.overflow = 'auto'; // Re-enable scrolling
-                console.log('Menu closed');
+                console.log('Sidebar menu closed');
             }
         });
         
@@ -155,36 +153,35 @@ function setupMobileMenu() {
             item.addEventListener('click', () => {
                 // Close menu when item is clicked
                 isMenuOpen = false;
-                navMenu.style.opacity = '0';
-                navMenu.style.pointerEvents = 'none';
+                navMenu.classList.remove('menu-open');
                 hamburgerMenu.classList.remove('active');
                 document.body.style.overflow = 'auto';
-                console.log('Menu closed via menu item click');
+                console.log('Sidebar menu closed via menu item click');
             });
-        });
-        
-        // Close menu when clicking outside (on the overlay)
-        navMenu.addEventListener('click', (e) => {
-            // Only close if clicking on the nav menu background, not on menu items
-            if (e.target === navMenu) {
-                isMenuOpen = false;
-                navMenu.style.opacity = '0';
-                navMenu.style.pointerEvents = 'none';
-                hamburgerMenu.classList.remove('active');
-                document.body.style.overflow = 'auto';
-                console.log('Menu closed via outside click');
-            }
         });
         
         // Close menu with Escape key
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape' && isMenuOpen) {
                 isMenuOpen = false;
-                navMenu.style.opacity = '0';
-                navMenu.style.pointerEvents = 'none';
+                navMenu.classList.remove('menu-open');
                 hamburgerMenu.classList.remove('active');
                 document.body.style.overflow = 'auto';
-                console.log('Menu closed via Escape key');
+                console.log('Sidebar menu closed via Escape key');
+            }
+        });
+        
+        // Close menu when clicking outside (on the main content area)
+        document.addEventListener('click', (e) => {
+            // Check if click is outside both hamburger and menu
+            if (isMenuOpen && 
+                !navMenu.contains(e.target) && 
+                !hamburgerMenu.contains(e.target)) {
+                isMenuOpen = false;
+                navMenu.classList.remove('menu-open');
+                hamburgerMenu.classList.remove('active');
+                document.body.style.overflow = 'auto';
+                console.log('Sidebar menu closed via outside click');
             }
         });
     }
@@ -231,14 +228,45 @@ function setupScrollAnimations() {
     });
 }
 
+// Check if all images are working properly
+function checkImageStatus() {
+    console.log('Checking image status...');
+    
+    // Check main controller image
+    const mainImage = document.querySelector('.container main img');
+    if (mainImage) {
+        console.log('Main controller image:', mainImage.src, mainImage.complete ? '✅ Loaded' : '❌ Failed');
+    }
+    
+    // Check color variant images
+    loadImage.forEach((imagePath, index) => {
+        const img = new Image();
+        img.onload = () => console.log(`Color variant ${index + 1} (${imagePath}): ✅ Loaded`);
+        img.onerror = () => console.log(`Color variant ${index + 1} (${imagePath}): ❌ Failed`);
+        img.src = imagePath;
+    });
+    
+    // Check card images
+    const cardImages = document.querySelectorAll('section img');
+    cardImages.forEach((img, index) => {
+        console.log(`Card image ${index + 1}:`, img.src, img.complete ? '✅ Loaded' : '❌ Failed');
+    });
+    
+    // Check interactive image
+    const interactiveImage = document.querySelector('.second-section .interactive-image img');
+    if (interactiveImage) {
+        console.log('Interactive image:', interactiveImage.src, interactiveImage.complete ? '✅ Loaded' : '❌ Failed');
+    }
+}
+
 // Initialize all functionality when DOM is loaded
 function initializeWebsite() {
-    console.log('PS4 Controller Website - Enhanced Version with Fixed Hamburger Menu Loaded');
+    console.log('PS4 Controller Website - Enhanced Version with Clean White Sidebar Menu Loaded');
     
     // Setup all interactive features
     setupColorButtons();
     setupSmoothScrolling();
-    setupMobileMenu(); // Fixed hamburger menu functionality
+    setupMobileMenu(); // Updated sidebar menu functionality
     setupImageLoading();
     setupScrollAnimations();
     
@@ -252,7 +280,10 @@ function initializeWebsite() {
         loginContainer.style.opacity = '0';
     }
     
-    console.log('All enhancements loaded successfully, including fixed hamburger menu!');
+    // Check image status after a short delay to ensure DOM is ready
+    setTimeout(checkImageStatus, 1000);
+    
+    console.log('All enhancements loaded successfully, including clean white sidebar menu!');
 }
 
 // Start initialization when DOM is fully loaded
