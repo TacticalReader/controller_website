@@ -1,4 +1,4 @@
-// Controller Website JavaScript - Enhanced Version
+// Controller Website JavaScript - Enhanced Version with Fixed Hamburger Menu
 
 // Image array for controller colors
 const loadImage = [
@@ -122,24 +122,69 @@ function setupSmoothScrolling() {
     });
 }
 
-// Enhanced hamburger menu functionality
+// FIXED: Enhanced hamburger menu functionality with correct logic
 function setupMobileMenu() {
     const hamburgerMenu = document.querySelector('.hamburger-menu');
     const navMenu = document.querySelector('header ul');
     let isMenuOpen = false;
     
-    if (hamburgerMenu) {
+    if (hamburgerMenu && navMenu) {
         hamburgerMenu.addEventListener('click', () => {
             isMenuOpen = !isMenuOpen;
             
             if (isMenuOpen) {
+                // SHOW menu
                 navMenu.style.opacity = '1';
                 navMenu.style.pointerEvents = 'all';
                 hamburgerMenu.classList.add('active');
+                document.body.style.overflow = 'hidden'; // Prevent background scrolling
+                console.log('Menu opened');
             } else {
+                // HIDE menu
                 navMenu.style.opacity = '0';
                 navMenu.style.pointerEvents = 'none';
                 hamburgerMenu.classList.remove('active');
+                document.body.style.overflow = 'auto'; // Re-enable scrolling
+                console.log('Menu closed');
+            }
+        });
+        
+        // Close menu when clicking on menu items
+        const menuItems = navMenu.querySelectorAll('li');
+        menuItems.forEach(item => {
+            item.addEventListener('click', () => {
+                // Close menu when item is clicked
+                isMenuOpen = false;
+                navMenu.style.opacity = '0';
+                navMenu.style.pointerEvents = 'none';
+                hamburgerMenu.classList.remove('active');
+                document.body.style.overflow = 'auto';
+                console.log('Menu closed via menu item click');
+            });
+        });
+        
+        // Close menu when clicking outside (on the overlay)
+        navMenu.addEventListener('click', (e) => {
+            // Only close if clicking on the nav menu background, not on menu items
+            if (e.target === navMenu) {
+                isMenuOpen = false;
+                navMenu.style.opacity = '0';
+                navMenu.style.pointerEvents = 'none';
+                hamburgerMenu.classList.remove('active');
+                document.body.style.overflow = 'auto';
+                console.log('Menu closed via outside click');
+            }
+        });
+        
+        // Close menu with Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && isMenuOpen) {
+                isMenuOpen = false;
+                navMenu.style.opacity = '0';
+                navMenu.style.pointerEvents = 'none';
+                hamburgerMenu.classList.remove('active');
+                document.body.style.overflow = 'auto';
+                console.log('Menu closed via Escape key');
             }
         });
     }
@@ -188,24 +233,26 @@ function setupScrollAnimations() {
 
 // Initialize all functionality when DOM is loaded
 function initializeWebsite() {
-    console.log('PS4 Controller Website - Enhanced Version Loaded');
+    console.log('PS4 Controller Website - Enhanced Version with Fixed Hamburger Menu Loaded');
     
     // Setup all interactive features
     setupColorButtons();
     setupSmoothScrolling();
-    setupMobileMenu();
+    setupMobileMenu(); // Fixed hamburger menu functionality
     setupImageLoading();
     setupScrollAnimations();
     
-    // Add event listeners
+    // Add event listeners for login form
     document.addEventListener('keydown', handleEscapeKey);
-    loginContainer.addEventListener('click', handleOutsideClick);
+    if (loginContainer) {
+        loginContainer.addEventListener('click', handleOutsideClick);
+        
+        // Add CSS for better login container opacity
+        loginContainer.style.transition = 'opacity 0.3s ease';
+        loginContainer.style.opacity = '0';
+    }
     
-    // Add CSS for better login container opacity
-    loginContainer.style.transition = 'opacity 0.3s ease';
-    loginContainer.style.opacity = '0';
-    
-    console.log('All enhancements loaded successfully!');
+    console.log('All enhancements loaded successfully, including fixed hamburger menu!');
 }
 
 // Start initialization when DOM is fully loaded
