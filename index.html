@@ -26,6 +26,8 @@
                 <li><a href="#home"><i class="fa fa-home"></i> Home</a></li>
                 <li><a href="#features"><i class="fa fa-gamepad"></i> Features</a></li>
                 <li><a href="#colors"><i class="fa fa-palette"></i> Colors</a></li>
+                <li><a href="#specs"><i class="fa fa-list"></i> Specs</a></li>
+                <li><a href="#testimonials"><i class="fa fa-comments"></i> Reviews</a></li>
             </ul>
         </nav>
         <div class="hamburger-menu">
@@ -43,11 +45,12 @@
                 <button id="login-btn" class="cta-button">Log In</button>
             </div>
             <div class="hero-image">
-                <img src="./controller.png" alt="Black PS4 Controller floating majestically">
+                <img src="./ps4-controller-png-42098.png" alt="Black PS4 Controller floating majestically" class="hero-controller-image">
             </div>
         </section>
 
         <section id="features" class="features-section">
+            <h2 class="section-title">Core Features</h2>
             <div class="card">
                 <img src="https://images.unsplash.com/photo-1606144042614-b2417e99c4e3?ixlib=rb-1.2.1&amp;auto=format&amp;fit=crop&amp;w=870&amp;q=80" alt="A vibrant 4K gaming scene on a large screen">
                 <div class="card-content">
@@ -72,16 +75,69 @@
         </section>
 
         <section id="colors" class="color-section">
-            <h2>Available in 3 Different Colors</h2>
+            <h2 class="section-title">Available in 3 Different Colors</h2>
             <div class="color-buttons">
                 <button class="color-black" data-color="black" aria-label="Select Black Controller">Black</button>
                 <button class="color-white" data-color="white" aria-label="Select White Controller">White</button>
                 <button class="color-red" data-color="red" aria-label="Select Red Controller">Red</button>
             </div>
             <div class="interactive-image-container">
-                <img src="./ps4-controller-png-42098.png" alt="Interactive PS4 Controller showing the currently selected color" class="controller-image">
+                <img src="./ps4-controller-png-42098.png" alt="Interactive PS4 Controller showing the currently selected color" class="interactive-controller-image">
             </div>
         </section>
+
+        <section id="specs" class="specs-section">
+            <h2 class="section-title">Technical Specifications</h2>
+            <table class="specs-table">
+                <thead>
+                    <tr>
+                        <th>Feature</th>
+                        <th>Details</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td data-label="Feature">Connectivity</td>
+                        <td data-label="Details">Bluetooth 4.0, USB-C</td>
+                    </tr>
+                    <tr>
+                        <td data-label="Feature">Battery Life</td>
+                        <td data-label="Details">Up to 12 hours</td>
+                    </tr>
+                    <tr>
+                        <td data-label="Feature">Haptic Feedback</td>
+                        <td data-label="Details">Dual Actuators</td>
+                    </tr>
+                    <tr>
+                        <td data-label="Feature">Adaptive Triggers</td>
+                        <td data-label="Details">Dynamic Resistance L2/R2</td>
+                    </tr>
+                    <tr>
+                        <td data-label="Feature">Weight</td>
+                        <td data-label="Details">280g (9.87 oz)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section id="testimonials" class="testimonials-section">
+            <h2 class="section-title">What Gamers Are Saying</h2>
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <blockquote>The haptic feedback is a game-changer. You don't just play the game, you feel it. Absolutely incredible immersion.</blockquote>
+                    <cite>— Alex R.</cite>
+                </div>
+                <div class="testimonial-card">
+                    <blockquote>I was skeptical about the adaptive triggers, but now I can't imagine playing without them. The tension is so realistic.</blockquote>
+                    <cite>— Jenna M.</cite>
+                </div>
+                <div class="testimonial-card">
+                    <blockquote>Finally, a controller that feels truly 'next-gen'. The build quality is superb and it's incredibly comfortable for long sessions.</blockquote>
+                    <cite>— David L.</cite>
+                </div>
+            </div>
+        </section>
+
     </main>
 
     <footer class="site-footer">
@@ -102,6 +158,7 @@
     <!-- Login Form Modal -->
     <div id="login-container">
       <div class="login-screen">
+        <button id="login-close-btn" aria-label="Close login form">&times;</button>
         <div class="screen__content">
           <form class="login">
             <div class="login__field">
@@ -112,7 +169,7 @@
               <i class="login__icon fas fa-lock"></i>
               <input type="password" class="login__input" placeholder="Password">
             </div>
-            <button class="button login__submit">
+            <button type="button" class="button login__submit">
               <span class="button__text">Log In Now</span>
               <i class="button__icon fas fa-chevron-right"></i>
             </button>    
