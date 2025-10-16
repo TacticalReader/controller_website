@@ -484,6 +484,27 @@ color: var(--text-muted);
 }
 
 /*====================================
+UI ICONS
+====================================*/
+.cta-button i,
+.card-content h3 i,
+.specs-table td:first-child i,
+.footer-column h4 i,
+.newsletter-form button:not([disabled]) i {
+    margin-right: 8px;
+}
+
+.card-content h3 i {
+    color: var(--accent);
+}
+
+.specs-table td:first-child i {
+    color: var(--accent);
+    width: 20px;
+    text-align: center;
+}
+
+/*====================================
 LOGIN FORM MODAL
 ====================================*/
 #login-container {
@@ -525,7 +546,7 @@ right: 15px;
 background: transparent;
 border: none;
 color: #7875B5;
-font-size: 1.5rem;
+font-size: 1.3rem;
 cursor: pointer;
 z-index: 10;
 transition: transform 0.2s ease, color 0.2s ease;
