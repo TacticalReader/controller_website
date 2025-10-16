@@ -13,6 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const featureCards = document.querySelectorAll('.features-section .card');
   const testimonialCards = document.querySelectorAll('.testimonial-card');
   const scrollToTopBtn = document.querySelector('#scroll-to-top');
+  const newsletterForm = document.querySelector('#newsletter-form');
 
   // --- State ---
   const controllerImages = {
@@ -95,6 +96,33 @@ document.addEventListener('DOMContentLoaded', () => {
     testimonialCards[currentTestimonialIndex].classList.add('active');
   };
 
+  // Handles newsletter form submission
+  const handleNewsletterSubmit = (event) => {
+    event.preventDefault();
+    const form = event.target;
+    const input = form.querySelector('input[type="email"]');
+    const button = form.querySelector('button');
+    const message = form.querySelector('.newsletter-message');
+    if (!input || !button || !message) return;
+
+    const email = input.value.trim();
+    // Basic email validation
+    if (email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      // Success state
+      form.classList.add('subscribed');
+      message.textContent = `Thank you! News is on its way.`;
+      button.innerHTML = '<i class="fas fa-check"></i> Subscribed';
+      input.disabled = true;
+      button.disabled = true;
+    } else {
+      // Invalid email feedback
+      input.style.borderColor = 'var(--accent)';
+      setTimeout(() => {
+        input.style.borderColor = '';
+      }, 2000);
+    }
+  };
+
   // --- Intersection Observer for Animations ---
   const observerOptions = {
     root: null,
@@ -154,6 +182,10 @@ document.addEventListener('DOMContentLoaded', () => {
     scrollToTopBtn.addEventListener('click', () => {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
+  }
+
+  if (newsletterForm) {
+    newsletterForm.addEventListener('submit', handleNewsletterSubmit);
   }
 
   window.addEventListener('scroll', handleScroll);
