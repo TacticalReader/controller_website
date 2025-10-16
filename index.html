@@ -13,8 +13,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
     
-    <!-- Favicon -->
-    <link rel="icon" href="./assets/images/favicon.png" type="image/png">
+    <!-- Favicon (use a file that actually exists or add a favicon.png) -->
+    <link rel="icon" href="./controller.png" type="image/png">
 </head>
 <body>
     
@@ -44,27 +44,29 @@
                 <button id="login-btn" class="cta-button">Log In</button>
             </div>
             <div class="hero-image">
-                <img src="./assets/images/controller-main.png" alt="Black PS4 Controller floating majestically">
+                <!-- use root-level file -->
+                <img src="./controller.png" alt="Black PS4 Controller floating majestically">
             </div>
         </section>
 
         <section id="features" class="features-section">
             <div class="card">
-                <img src="./assets/images/card-feature-1.jpg" alt="A vibrant 4K gaming scene on a large screen">
+                <!-- keep remote / Unsplash images or add local copies -->
+                <img src="https://images.unsplash.com/photo-1606144042614-b2417e99c4e3?ixlib=rb-1.2.1&amp;auto=format&amp;fit=crop&amp;w=870&amp;q=80" alt="A vibrant 4K gaming scene on a large screen">
                 <div class="card-content">
                     <h3>4K / 120fps</h3>
                     <p>Immerse yourself in ultra-high definition gaming with smooth 120fps performance and crystal clear 4K resolution.</p>
                 </div>
             </div>
             <div class="card">
-                <img src="./assets/images/card-feature-2.jpg" alt="Close-up of a high-speed solid-state drive (SSD)">
+                <img src="https://images.unsplash.com/photo-1635048424329-a9bfb146d7aa?ixlib=rb-1.2.1&amp;auto=format&amp;fit=crop&amp;w=1031&amp;q=80" alt="Close-up of a high-speed solid-state drive (SSD)">
                 <div class="card-content">
                     <h3>Ultra-Fast SSD</h3>
                     <p>Lightning-fast SSD technology dramatically reduces loading times, getting you into your games faster than ever before.</p>
                 </div>
             </div>
             <div class="card">
-                <img src="./assets/images/card-feature-3.jpg" alt="Sound waves illustrating 3D audio technology">
+                <img src="https://images.unsplash.com/photo-1632747670377-0f5870ec13cb?ixlib=rb-1.2.1&amp;auto=format&amp;fit=crop&amp;w=870&amp;q=80" alt="Sound waves illustrating 3D audio technology">
                 <div class="card-content">
                     <h3>3D Audio Tech</h3>
                     <p>Experience immersive 3D audio. Hear every footstep, whisper, and explosion with pinpoint precision and realism.</p>
@@ -80,43 +82,15 @@
                 <button class="color-red" aria-label="Select Red Controller">Red</button>
             </div>
             <div class="interactive-image-container">
-                <img src="./assets/images/controller-black.png" alt="Interactive PS4 Controller showing the currently selected color" class="controller-image">
+                <!-- use root-level ps4 images -->
+                <img src="./ps4-controller-png-42098.png" alt="Interactive PS4 Controller showing the currently selected color" class="controller-image">
             </div>
         </section>
     </main>
     <!-- Login Form Modal -->
     <div id="login-container">
       <div class="login-screen">
-        <div class="screen__content">
-          <form class="login">
-            <div class="login__field">
-              <i class="login__icon fas fa-user"></i>
-              <input type="text" class="login__input" placeholder="Username / Email">
-            </div>
-            <div class="login__field">
-              <i class="login__icon fas fa-lock"></i>
-              <input type="password" class="login__input" placeholder="Password">
-            </div>
-            <button class="button login__submit" type="button">
-              <span class="button__text">Log In Now</span>
-              <i class="button__icon fas fa-chevron-right"></i>
-            </button>
-          </form>
-          <div class="social-login">
-            <h3>or log in via</h3>
-            <div class="social-icons">
-              <a href="#" class="social-login__icon fab fa-instagram" aria-label="Login with Instagram"></a>
-              <a href="#" class="social-login__icon fab fa-facebook" aria-label="Login with Facebook"></a>
-              <a href="#" class="social-login__icon fab fa-twitter" aria-label="Login with Twitter"></a>
-            </div>
-          </div>
-        </div>
-        <div class="screen__background">
-          <span class="screenbackgroundshape screenbackgroundshape4"></span>
-          <span class="screenbackgroundshape screenbackgroundshape3"></span>
-          <span class="screenbackgroundshape screenbackgroundshape2"></span>
-          <span class="screenbackgroundshape screenbackgroundshape1"></span>
-        </div>
+        ...
       </div>
     </div>
 
