@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const loginContainer = document.querySelector('#login-container');
   const loginCloseBtn = document.querySelector('#login-close-btn');
   const featureCards = document.querySelectorAll('.features-section .card');
+  const specItems = document.querySelectorAll('.specs-section .spec-item');
   const testimonialCards = document.querySelectorAll('.testimonial-card');
   const scrollToTopBtn = document.querySelector('#scroll-to-top');
   const newsletterForm = document.querySelector('#newsletter-form');
@@ -107,7 +108,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const email = input.value.trim();
     // Basic email validation
-    if (email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    if (email && /^[^\[email protected]\]+@[^\[email protected]\]+\.[^\[email protected]\]+$/.test(email)) {
       // Success state
       form.classList.add('subscribed');
       message.textContent = `Thank you! News is on its way.`;
@@ -140,6 +141,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const observer = new IntersectionObserver(observerCallback, observerOptions);
   featureCards.forEach(card => observer.observe(card));
+  specItems.forEach(item => observer.observe(item));
 
 
   // --- Event Listeners ---
