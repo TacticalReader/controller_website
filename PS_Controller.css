@@ -592,6 +592,9 @@ header nav ul li a:hover {
     color: var(--primary);
     margin-bottom: 10px;
     font-family: inherit;
+    transition: border-color 0.3s ease, max-height 0.5s ease-out, opacity 0.5s ease-out, margin-bottom 0.5s ease-out;
+    max-height: 100px;
+    opacity: 1;
 }
 
 .newsletter-form button {
@@ -607,6 +610,43 @@ header nav ul li a:hover {
 
 .newsletter-form button:hover {
     background-color: #ff3742;
+}
+
+.newsletter-message {
+    color: #2ecc71;
+    font-weight: 700;
+    margin-top: 0;
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: all 0.4s ease-out;
+    text-align: center;
+    font-size: 0.95rem;
+}
+
+.newsletter-form.subscribed .newsletter-message {
+    max-height: 60px;
+    opacity: 1;
+    margin-top: 10px;
+}
+
+.newsletter-form.subscribed input {
+    max-height: 0;
+    opacity: 0;
+    margin-bottom: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    border-width: 0;
+}
+
+.newsletter-form.subscribed button {
+    width: 100%;
+    background-color: #27ae60;
+    cursor: default;
+}
+
+.newsletter-form.subscribed button:hover {
+    background-color: #27ae60;
 }
 
 .footer-bottom {
