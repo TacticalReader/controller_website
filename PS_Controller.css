@@ -361,34 +361,60 @@ margin: auto;
 padding: 80px 0;
 }
 
-.specs-table {
-width: 100%;
-max-width: 800px;
-margin: 0 auto;
-border-collapse: collapse;
-box-shadow: 0 4px 12px var(--card-shadow);
-border-radius: var(--border-radius);
-overflow: hidden;
+.specs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 30px;
+  max-width: 900px;
+  margin: 0 auto;
 }
 
-.specs-table th, .specs-table td {
-padding: 15px 20px;
-text-align: left;
-border-bottom: 1px solid #eee;
+.spec-item {
+  background-color: var(--background-light);
+  padding: 25px;
+  border-radius: var(--border-radius);
+  box-shadow: 0 4px 12px var(--card-shadow);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease, transform 0.5s ease, box-shadow 0.3s ease;
 }
 
-.specs-table th {
-background-color: var(--background-light);
-font-weight: 700;
-color: var(--secondary);
+.spec-item.is-visible {
+  opacity: 1;
+  transform: translateY(0);
 }
 
-.specs-table tr:last-child td {
-border-bottom: none;
+/* Staggered animation delay */
+.spec-item:nth-child(2) { transition-delay: 0.1s; }
+.spec-item:nth-child(3) { transition-delay: 0.2s; }
+.spec-item:nth-child(4) { transition-delay: 0.3s; }
+.spec-item:nth-child(5) { transition-delay: 0.4s; }
+
+.spec-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px var(--hover-shadow);
 }
 
-.specs-table tr:hover {
-background-color: #f5f5f5;
+.spec-icon {
+  font-size: 2.5rem;
+  color: var(--accent);
+  margin-bottom: 15px;
+}
+
+.spec-title {
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--secondary);
+  margin-bottom: 8px;
+}
+
+.spec-details {
+  color: var(--text-muted);
+  font-size: 1rem;
 }
 
 /*====================================
@@ -488,7 +514,6 @@ UI ICONS
 ====================================*/
 .cta-button i,
 .card-content h3 i,
-.specs-table td:first-child i,
 .footer-column h4 i,
 .newsletter-form button:not([disabled]) i {
     margin-right: 8px;
@@ -496,12 +521,6 @@ UI ICONS
 
 .card-content h3 i {
     color: var(--accent);
-}
-
-.specs-table td:first-child i {
-    color: var(--accent);
-    width: 20px;
-    text-align: center;
 }
 
 /*====================================
@@ -746,51 +765,6 @@ color: var(--accent);
 transform: translateY(-3px);
 }
 
-.footer-credit {
-    background-color: rgba(255, 255, 255, 0.05);
-    padding: 8px 15px;
-    border-radius: 8px;
-    border: 1px solid #444;
-    text-align: center;
-    transition: all 0.3s ease;
-}
-
-.footer-credit:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-    border-color: var(--accent);
-}
-
-.footer-credit p {
-    margin: 0;
-    font-size: 0.9rem;
-    color: rgba(255, 255, 255, 0.7);
-}
-
-.footer-credit a {
-    color: var(--primary);
-    font-weight: 700;
-    text-decoration: none;
-    transition: color 0.3s ease;
-}
-
-.footer-credit a:hover {
-    color: var(--accent);
-}
-
-.footer-credit i {
-    margin: 0 5px;
-    color: var(--accent);
-}
-
-.footer-credit a i {
-    color: inherit; /* Inherit color from the link */
-    transition: transform 0.3s ease;
-}
-
-.footer-credit a:hover i.fa-github {
-    transform: scale(1.2);
-}
-
 /*====================================
 SCROLL TO TOP BUTTON
 ====================================*/
@@ -886,35 +860,6 @@ MEDIA QUERIES
     .color-buttons {
         flex-wrap: wrap;
         justify-content: center;
-    }
-
-    .specs-table, .specs-table thead, .specs-table tbody, .specs-table th, .specs-table td, .specs-table tr {
-        display: block;
-    }
-    .specs-table thead tr {
-        position: absolute;
-        top: -9999px;
-        left: -9999px;
-    }
-    .specs-table tr {
-        border: 1px solid #ccc;
-        margin-bottom: 10px;
-    }
-    .specs-table td {
-        border: none;
-        border-bottom: 1px solid #eee;
-        position: relative;
-        padding-left: 50%;
-    }
-    .specs-table td:before {
-        position: absolute;
-        top: 6px;
-        left: 6px;
-        width: 45%;
-        padding-right: 10px;
-        white-space: nowrap;
-        content: attr(data-label);
-        font-weight: bold;
     }
 
     .footer-grid {
