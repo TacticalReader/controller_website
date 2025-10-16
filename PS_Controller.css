@@ -393,6 +393,7 @@ padding: 80px 0;
 .spec-item:nth-child(3) { transition-delay: 0.2s; }
 .spec-item:nth-child(4) { transition-delay: 0.3s; }
 .spec-item:nth-child(5) { transition-delay: 0.4s; }
+.spec-item:nth-child(6) { transition-delay: 0.5s; }
 
 .spec-item:hover {
   transform: translateY(-5px);
