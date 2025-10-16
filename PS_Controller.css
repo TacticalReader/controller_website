@@ -621,10 +621,14 @@ header nav ul li a:hover {
     gap: 20px;
 }
 
+.social-links {
+    display: flex;
+    gap: 20px;
+}
+
 .social-links a {
     color: var(--primary);
     font-size: 1.5rem;
-    margin-left: 20px;
     transition: color 0.3s ease, transform 0.3s ease;
 }
 
@@ -771,11 +775,8 @@ header nav ul li a:hover {
 
     .footer-bottom {
         flex-direction: column;
+        justify-content: center;
         text-align: center;
-    }
-
-    .social-links a {
-        margin: 0 10px;
     }
 }
 
