@@ -108,7 +108,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const email = input.value.trim();
     // Basic email validation
-    if (email && /^[^\[email protected]\]+@[^\[email protected]\]+\.[^\[email protected]\]+$/.test(email)) {
+    if (email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       // Success state
       form.classList.add('subscribed');
       message.textContent = `Thank you! News is on its way.`;
