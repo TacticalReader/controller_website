@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const header = document.querySelector('header');
   const hamburgerMenu = document.querySelector('.hamburger-menu');
   const navMenu = document.querySelector('header nav ul');
-  const navLinks = document.querySelectorAll('header nav ul li a');
+  const navLinks = document.querySelectorAll('.smooth-scroll');
   const colorButtons = document.querySelectorAll('.color-buttons button');
   const interactiveImage = document.querySelector('.interactive-controller-image');
   const heroImage = document.querySelector('.hero-controller-image');
@@ -71,7 +71,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     const targetElement = document.querySelector(targetId);
     if (targetElement) {
-      targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      // Calculate offset for fixed header
+      const headerOffset = 90;
+      const elementPosition = targetElement.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+      window.scrollTo({
+         top: offsetPosition,
+         behavior: "smooth"
+      });
     }
     // Close mobile menu if open
     if (navMenu && navMenu.classList.contains('menu-open')) {
@@ -108,7 +116,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const email = input.value.trim();
     // Basic email validation
-    if (email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    if (email && /^[\s@]+@[\s@]+\.[\s@]+$/.test(email)) {
       // Success state
       form.classList.add('subscribed');
       message.textContent = `Thank you! News is on its way.`;
@@ -177,7 +185,10 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   navLinks.forEach(link => {
-    link.addEventListener('click', handleSmoothScroll);
+    // Only apply to anchor links, not buttons that might have the class
+    if (link.tagName === 'A') {
+        link.addEventListener('click', handleSmoothScroll);
+    }
   });
 
   if (scrollToTopBtn) {
