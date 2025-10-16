@@ -4,46 +4,109 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PS Controller Site</title>
+    <title>PS4 Controller - Next-Gen Gaming Experience</title>
+    <meta name="description" content="Discover the PS4 controller with next-gen features. Explore interactive color variants, 4K/120fps gameplay, and ultra-fast SSD performance.">
+    
     <link rel="stylesheet" href="PS_Controller.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@200&family=Open+Sans:wght@300;400&family=Poppins:wght@200&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha512-SfTiTlX6kk+qitfevl/7LibUOeJWlt9rbyDn92a1DqWOw9vWG2MFoays0sgObmWazO5BQPiFucnnEAjpAB+/Sw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    
+    <link rel="icon" href="./controller.png" type="image/png">
 </head>
 <body>
+    
     <header>
-        <nav>
         <div class="logo">
-          <h2>PS4 Controller</h2>
+          <h2><a href="#">GameSphere</a></h2>
         </div>
+        <nav>
+            <ul>
+                <li><a href="#home"><i class="fa fa-home"></i> Home</a></li>
+                <li><a href="#features"><i class="fa fa-gamepad"></i> Features</a></li>
+                <li><a href="#colors"><i class="fa fa-palette"></i> Colors</a></li>
+            </ul>
+        </nav>
         <div class="hamburger-menu">
-            <div></div>
-            <div></div>
-            <div></div>
+            <span></span>
+            <span></span>
+            <span></span>
         </div>
-        <ul>
-            <li><i class="fa fa-home" aria-hidden="true" style="color: var(--secondary); font-size: large;"></i> Home</li>
-            <li><i class="fa fa-product-hunt" aria-hidden="true" style="color: var(--secondary);"></i> Product</li>
-            <li> <i class="fa fa-newspaper-o" aria-hidden="true" style="color: var(--secondary);"></i> News</li>
-        </ul>
-    </nav>
     </header>
-    <div class="container">
-        <aside>
-        <h1>PS4</h1>
-        <h1>experience gaming</h1>
-        <button class="login-button" onclick="loginForm()"><h3 id="login-btn">Log in</h3></button>
-    </aside>
-    <!-- log in form -->
+
+    <main>
+        <section id="home" class="container">
+            <div class="hero-content">
+                <h1>PS4 Controller</h1>
+                <h2>Experience Next-Level Gaming</h2>
+                <button id="login-btn" class="cta-button">Log In</button>
+            </div>
+            <div class="hero-image">
+                <img src="./controller.png" alt="Black PS4 Controller floating majestically">
+            </div>
+        </section>
+
+        <section id="features" class="features-section">
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1606144042614-b2417e99c4e3?ixlib=rb-1.2.1&amp;auto=format&amp;fit=crop&amp;w=870&amp;q=80" alt="A vibrant 4K gaming scene on a large screen">
+                <div class="card-content">
+                    <h3>4K / 120fps</h3>
+                    <p>Immerse yourself in ultra-high definition gaming with smooth 120fps performance and crystal clear 4K resolution.</p>
+                </div>
+            </div>
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1635048424329-a9bfb146d7aa?ixlib=rb-1.2.1&amp;auto=format&amp;fit=crop&amp;w=1031&amp;q=80" alt="Close-up of a high-speed solid-state drive (SSD)">
+                <div class="card-content">
+                    <h3>Ultra-Fast SSD</h3>
+                    <p>Lightning-fast SSD technology dramatically reduces loading times, getting you into your games faster than ever before.</p>
+                </div>
+            </div>
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1632747670377-0f5870ec13cb?ixlib=rb-1.2.1&amp;auto=format&amp;fit=crop&amp;w=870&amp;q=80" alt="Sound waves illustrating 3D audio technology">
+                <div class="card-content">
+                    <h3>3D Audio Tech</h3>
+                    <p>Experience immersive 3D audio. Hear every footstep, whisper, and explosion with pinpoint precision and realism.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="colors" class="color-section">
+            <h2>Available in 3 Different Colors</h2>
+            <div class="color-buttons">
+                <button class="color-black" data-color="black" aria-label="Select Black Controller">Black</button>
+                <button class="color-white" data-color="white" aria-label="Select White Controller">White</button>
+                <button class="color-red" data-color="red" aria-label="Select Red Controller">Red</button>
+            </div>
+            <div class="interactive-image-container">
+                <img src="./ps4-controller-png-42098.png" alt="Interactive PS4 Controller showing the currently selected color" class="controller-image">
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="footer-content">
+            <p>&copy; 2024 GameSphere. All Rights Reserved.</p>
+            <div class="social-links">
+                <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+                <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <button id="scroll-to-top" aria-label="Scroll to top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- Login Form Modal -->
     <div id="login-container">
-      <div class="screen">
+      <div class="login-screen">
         <div class="screen__content">
           <form class="login">
             <div class="login__field">
               <i class="login__icon fas fa-user"></i>
-              <input type="text" class="login__input" placeholder="User name / Email">
+              <input type="text" class="login__input" placeholder="Username / Email">
             </div>
             <div class="login__field">
               <i class="login__icon fas fa-lock"></i>
@@ -71,51 +134,7 @@
         </div>  
       </div>
     </div>
-    <main>
-        <img src="controller.png" alt="PS4 Controller - Main display showing gaming controller">
-    </main>
-</div>
-   
-      <section>
-          <div class="card-one card-hover">
-            <img src="ps4-controller-png-42099.png" alt="4K Gaming Display with 120fps performance">
-           <div class="sub-one">
-          <h3 style="color: black; text-align: center; font-weight: bolder;">4k / 120fps</h3>
-          <p style="color: black;  text-align: center; font-weight: bolder;">Experience ultra-high definition gaming with smooth 120fps performance. Every detail comes to life with crystal clear 4K resolution for an immersive gaming experience.</p>
-          </div>
-        </div>
-          <div class="card-two card-hover">
-            <img src="ps4-controller-png-42109.png" alt="High-speed SSD storage technology">
-            <div class="sub-two">
-            <h3 style="color: black;  text-align: center; font-weight: bolder;">New SSD</h3>
-            <p style="color: black;  text-align: center; font-weight: bolder;">Lightning-fast SSD technology reduces loading times dramatically. Get into your games faster than ever with next-generation storage solutions.</p>
-          </div>
-        </div>
-             
-          <div class="card-three card-hover">
-            <img src="ps4-controller-png-42098.png" alt="Atmospheric gaming lighting effects">
-            <div class="sub-three">
-            <h3 style="color: black;  text-align: center; font-weight: bolder;">Atmos-lite</h3>
-            <p style="color: black;  text-align: center; font-weight: bolder;">Immerse yourself in 3D audio with Atmos-lite technology. Hear every footstep, every whisper, and every explosion with pinpoint precision.</p>
-        </div>
-    </div>
-      </section>
-      <section class="second-section">
-          <div class="colours-available">
-              <p>Available in 3 Different Colours</p>
-          </div>
-              <div class="colours-button">
-                <button class="first" aria-label="Select Black Controller">Black</button>
-                <button class="second" aria-label="Select White Controller">White</button>
-                <button class="third" aria-label="Select Red Controller">Red</button>
-              </div>
-              <div class="interactive-image">            
-            <img src="ps4-controller-png-42098.png" alt="Interactive PS4 Controller - Color variants available" class="colours"></div>
-          
-      </section>
-      <script src="PS_Controller.js"></script>
 
+    <script src="PS_Controller.js"></script>
 </body>
 </html>
-               
-          
