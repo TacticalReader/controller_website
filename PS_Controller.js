@@ -5,10 +5,13 @@ document.addEventListener('DOMContentLoaded', () => {
   const navMenu = document.querySelector('header nav ul');
   const navLinks = document.querySelectorAll('header nav ul li a');
   const colorButtons = document.querySelectorAll('.color-buttons button');
-  const interactiveImage = document.querySelector('.controller-image');
+  const interactiveImage = document.querySelector('.interactive-controller-image');
+  const heroImage = document.querySelector('.hero-controller-image');
   const loginTrigger = document.querySelector('#login-btn');
   const loginContainer = document.querySelector('#login-container');
+  const loginCloseBtn = document.querySelector('#login-close-btn');
   const featureCards = document.querySelectorAll('.features-section .card');
+  const testimonialCards = document.querySelectorAll('.testimonial-card');
   const scrollToTopBtn = document.querySelector('#scroll-to-top');
 
   // --- State ---
@@ -17,6 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
     white: './ps4-controller-png-42099.png',
     red: './ps4-controller-png-42109.png',
   };
+  let currentTestimonialIndex = 0;
 
   // --- Functions ---
 
@@ -37,15 +41,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Changes the controller image based on the selected color
   const changeControllerColor = (color) => {
-    if (!interactiveImage || !controllerImages[color]) return;
+    if (!controllerImages[color]) return;
 
-    interactiveImage.style.opacity = '0.5';
-    interactiveImage.style.transform = 'scale(0.95)';
+    const imagesToUpdate = [interactiveImage, heroImage].filter(Boolean);
+
+    imagesToUpdate.forEach(img => {
+        img.style.opacity = '0.5';
+        img.style.transform = 'scale(0.95)';
+    });
 
     setTimeout(() => {
-      interactiveImage.src = controllerImages[color];
-      interactiveImage.style.opacity = '1';
-      interactiveImage.style.transform = 'scale(1)';
+        imagesToUpdate.forEach(img => {
+            img.src = controllerImages[color];
+            img.style.opacity = '1';
+            img.style.transform = 'scale(1)';
+        });
     }, 200);
   };
 
@@ -77,6 +87,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
+  // Rotates testimonials
+  const rotateTestimonials = () => {
+    if (testimonialCards.length === 0) return;
+    testimonialCards.forEach(card => card.classList.remove('active'));
+    currentTestimonialIndex = (currentTestimonialIndex + 1) % testimonialCards.length;
+    testimonialCards[currentTestimonialIndex].classList.add('active');
+  };
+
   // --- Intersection Observer for Animations ---
   const observerOptions = {
     root: null,
@@ -105,6 +123,9 @@ document.addEventListener('DOMContentLoaded', () => {
   if (loginTrigger) {
     loginTrigger.addEventListener('click', toggleLoginModal);
   }
+  if (loginCloseBtn) {
+    loginCloseBtn.addEventListener('click', toggleLoginModal);
+  }
   if (loginContainer) {
     loginContainer.addEventListener('click', (e) => {
       if (e.target === loginContainer) {
@@ -113,7 +134,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && loginContainer.classList.contains('visible')) {
+    if (e.key === 'Escape' && loginContainer && loginContainer.classList.contains('visible')) {
       toggleLoginModal();
     }
   });
@@ -137,8 +158,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   window.addEventListener('scroll', handleScroll);
 
-  // --- Initial State ---
-  if (interactiveImage) {
-    interactiveImage.src = controllerImages.black;
+  // --- Initial State & Timers ---
+  changeControllerColor('black'); // Set initial color for all controller images
+
+  if (testimonialCards.length > 0) {
+    testimonialCards[0].classList.add('active');
+    setInterval(rotateTestimonials, 5000); // Rotate every 5 seconds
   }
 });
