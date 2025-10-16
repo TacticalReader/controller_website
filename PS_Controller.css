@@ -397,22 +397,32 @@ header nav ul li a:hover {
     width: 85%;
     margin: auto;
     padding: 80px 0;
+    background-color: #f0f2f5;
+    border-radius: var(--border-radius);
 }
 
 .testimonials-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 40px;
+    padding: 0 40px;
 }
 
 .testimonial-card {
-    background-color: var(--background-light);
-    padding: 30px;
+    background-color: var(--primary);
+    padding: 35px;
     border-radius: var(--border-radius);
     box-shadow: 0 4px 12px var(--card-shadow);
     opacity: 0;
     transform: scale(0.9);
-    transition: opacity 0.5s ease, transform 0.5s ease;
+    transition: opacity 0.5s ease, transform 0.5s ease, box-shadow 0.3s ease;
+    border-top: 4px solid var(--accent);
+    position: relative;
+}
+
+.testimonial-card:hover {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 12px 24px var(--hover-shadow);
 }
 
 .testimonial-card.active {
@@ -420,20 +430,58 @@ header nav ul li a:hover {
     transform: scale(1);
 }
 
+.testimonial-rating {
+    margin-bottom: 15px;
+    color: #f39c12; /* Gold color for stars */
+}
+
 .testimonial-card blockquote {
     font-style: italic;
-    color: var(--text-muted);
-    border-left: 4px solid var(--accent);
-    padding-left: 20px;
+    font-size: 1.1rem;
+    color: var(--secondary);
     margin: 0 0 20px 0;
+    position: relative;
+    padding-left: 35px;
+}
+
+.testimonial-card blockquote::before {
+    content: '\f10d';
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    position: absolute;
+    left: 0;
+    top: -5px;
+    font-size: 1.5rem;
+    color: var(--accent);
+    opacity: 0.8;
+}
+
+.testimonial-author {
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.testimonial-avatar img {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    margin-right: 15px;
+    object-fit: cover;
+    border: 2px solid var(--background-light);
 }
 
 .testimonial-card cite {
     font-weight: 700;
     color: var(--secondary);
-    display: block;
-    text-align: right;
+    font-style: normal;
 }
+
+.author-title {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
 
 /*====================================
   LOGIN FORM MODAL
