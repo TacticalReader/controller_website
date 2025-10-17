@@ -743,6 +743,17 @@ max-height: 100px;
 opacity: 1;
 }
 
+.newsletter-form input.invalid {
+  border-color: var(--accent);
+  animation: shake 0.5s;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
 .newsletter-form button {
 background-color: var(--accent);
 color: var(--primary);
@@ -759,7 +770,6 @@ background-color: #ff3742;
 }
 
 .newsletter-message {
-color: #2ecc71;
 font-weight: 700;
 margin-top: 0;
 max-height: 0;
@@ -770,7 +780,15 @@ text-align: center;
 font-size: 0.95rem;
 }
 
+.newsletter-message.error {
+  color: var(--accent);
+  max-height: 60px;
+  opacity: 1;
+  margin-top: 10px;
+}
+
 .newsletter-form.subscribed .newsletter-message {
+color: #2ecc71;
 max-height: 60px;
 opacity: 1;
 margin-top: 10px;
