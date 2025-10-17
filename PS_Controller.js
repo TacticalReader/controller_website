@@ -109,26 +109,39 @@ document.addEventListener('DOMContentLoaded', () => {
   const handleNewsletterSubmit = (event) => {
     event.preventDefault();
     const form = event.target;
-    const input = form.querySelector('input[type="email"]');
+    const input = form.querySelector('#newsletter-email');
     const button = form.querySelector('button');
-    const message = form.querySelector('.newsletter-message');
+    const message = form.querySelector('#newsletter-feedback');
     if (!input || !button || !message) return;
 
+    // Clear previous states
+    input.classList.remove('invalid');
+    message.classList.remove('error');
+    message.textContent = '';
+    input.setAttribute('aria-invalid', 'false');
+
     const email = input.value.trim();
-    // Basic email validation
-    if (email && /^[\s@]+@[\s@]+\.[\s@]+$/.test(email)) {
+    // A more reliable regex for email validation
+    const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+
+    if (email && emailRegex.test(email)) {
       // Success state
       form.classList.add('subscribed');
-      message.textContent = `Thank you! News is on its way.`;
+      message.textContent = 'Thank you! News is on its way.';
       button.innerHTML = '<i class="fas fa-check"></i> Subscribed';
       input.disabled = true;
       button.disabled = true;
     } else {
       // Invalid email feedback
-      input.style.borderColor = 'var(--accent)';
+      input.classList.add('invalid');
+      input.setAttribute('aria-invalid', 'true');
+      message.textContent = 'Please enter a valid email address.';
+      message.classList.add('error');
+      
+      // Remove invalid state after a delay for better UX
       setTimeout(() => {
-        input.style.borderColor = '';
-      }, 2000);
+        input.classList.remove('invalid');
+      }, 2500);
     }
   };
 
