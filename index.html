@@ -19,7 +19,7 @@
     
     <header>
         <div class="logo">
-          <h2><a href="#">GameSphere</a></h2>
+          <h2><a href="#home" class="smooth-scroll">GameSphere</a></h2>
         </div>
         <nav>
             <ul>
@@ -31,11 +31,11 @@
                 <li><button id="login-btn" class="nav-button"><i class="fas fa-sign-in-alt"></i> Log In</button></li>
             </ul>
         </nav>
-        <div class="hamburger-menu">
+        <button class="hamburger-menu" aria-label="Toggle navigation menu" aria-expanded="false">
             <span></span>
             <span></span>
             <span></span>
-        </div>
+        </button>
     </header>
 
     <main>
@@ -257,6 +257,7 @@
                 <h4><i class="fas fa-envelope"></i> Newsletter</h4>
                 <p>Get the latest updates and special offers directly in your inbox.</p>
                 <form id="newsletter-form" class="newsletter-form" novalidate>
+                    <label for="newsletter-email" class="visually-hidden">Email for newsletter</label>
                     <input type="email" id="newsletter-email" placeholder="Enter your email" required aria-required="true" aria-invalid="false" aria-describedby="newsletter-feedback">
                     <button type="submit"><i class="fas fa-paper-plane"></i> Subscribe</button>
                     <p id="newsletter-feedback" class="newsletter-message" role="status" aria-live="polite"></p>
@@ -288,11 +289,13 @@
           <form class="login">
             <div class="login__field">
               <i class="login__icon fas fa-user"></i>
-              <input type="text" class="login__input" placeholder="Username / Email">
+              <label for="login-username" class="visually-hidden">Username or Email</label>
+              <input type="text" id="login-username" class="login__input" placeholder="Username / Email">
             </div>
             <div class="login__field">
               <i class="login__icon fas fa-lock"></i>
-              <input type="password" class="login__input" placeholder="Password">
+              <label for="login-password" class="visually-hidden">Password</label>
+              <input type="password" id="login-password" class="login__input" placeholder="Password">
             </div>
             <button type="button" class="button login__submit">
               <span class="button__text">Log In Now</span>
