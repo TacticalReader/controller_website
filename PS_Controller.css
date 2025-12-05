@@ -43,6 +43,18 @@ margin-bottom: 40px;
 text-align: center;
 }
 
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 /*====================================
 HEADER & NAVIGATION
 ====================================*/
@@ -160,6 +172,9 @@ cursor: pointer;
 transition: all 0.3s ease;
 margin-right: 25px;
 z-index: 1002;
+background: none;
+border: none;
+padding: 5px;
 }
 
 .hamburger-menu span{
