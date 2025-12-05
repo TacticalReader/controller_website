@@ -1153,3 +1153,126 @@ MEDIA QUERIES
     .offer-title { font-size: 1.3rem; }
     .offer-countdown { font-size: 1.8rem; }
 }
+
+
+/* Add to existing :root variables */
+:root {
+    /* ... existing variables ... */
+    --gradient-start: #ff4757;
+    --gradient-end: #a2323b;
+}
+
+/* Offer Banner Animation & Styling */
+#offer-banner {
+    /* ... existing styles ... */
+    /* Enhance entry animation */
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out, visibility 0.6s;
+    background: linear-gradient(135deg, var(--secondary) 0%, #333 100%); /* Subtle gradient background */
+    border-top: 4px solid var(--accent); /* Keep the accent border */
+    position: fixed; /* Keep fixed position */
+    right: 25px; /* Adjust right position for responsiveness */
+    bottom: 25px; /* Adjust bottom position for responsiveness */
+    box-shadow: 0 12px 35px var(--hover-shadow); /* Stronger shadow */
+    animation: bannerPulse 5s infinite ease-in-out; /* Subtle pulsing effect */
+}
+
+#offer-banner.visible {
+    opacity: 1;
+    transform: translateY(0);
+    visibility: visible;
+}
+
+/* Keyframes for banner pulse */
+@keyframes bannerPulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.01); }
+    100% { transform: scale(1); }
+}
+
+/* Offer Title Icon Animation */
+.offer-title i {
+    margin-right: 10px;
+    color: var(--accent);
+    animation: iconBounce 2s infinite ease-in-out; /* Bouncing icon animation */
+}
+
+@keyframes iconBounce {
+    0%, 100% { transform: translateY(0); }
+    25%, 75% { transform: translateY(-5px); }
+    50% { transform: translateY(-1px); }
+}
+
+/* Countdown Styling - Make it more prominent */
+.offer-countdown {
+    /* ... existing styles ... */
+    background: rgba(255, 255, 255, 0.08); /* Slightly more opaque background */
+    border: 1px solid var(--accent); /* Accent border around countdown */
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.2); /* Inner shadow */
+    letter-spacing: 3px; /* Increase letter spacing */
+}
+
+.offer-countdown span {
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.3); /* Add text shadow for depth */
+}
+
+/* Claim Button Styling - Make it more inviting */
+.offer-claim-btn {
+    /* ... existing styles ... */
+    background: linear-gradient(45deg, var(--gradient-start), var(--gradient-end)); /* Gradient background */
+    box-shadow: 0 6px 15px rgba(255, 71, 87, 0.4); /* Accent colored shadow */
+}
+
+.offer-claim-btn:hover {
+    background: linear-gradient(45deg, #ff3742, #b53d47); /* Slightly darker gradient on hover */
+    transform: translateY(-3px); /* More pronounced lift */
+    box-shadow: 0 10px 25px rgba(255, 71, 87, 0.6); /* Stronger accent shadow on hover */
+}
+
+/* Offer Later Button - Improve focus */
+.offer-later-btn {
+    /* ... existing styles ... */
+    border: 2px solid rgba(255, 255, 255, 0.3); /* Softer border */
+}
+
+.offer-later-btn:hover {
+    background-color: rgba(255, 255, 255, 0.1); /* Lighter background on hover */
+    border-color: var(--primary); /* White border on hover */
+    color: var(--primary); /* Keep text color white */
+}
+
+/* Offer Close Button - More distinct */
+#offer-close-btn {
+    /* ... existing styles ... */
+    background-color: rgba(255, 255, 255, 0.1); /* Light background for button */
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+}
+
+#offer-close-btn:hover {
+    color: var(--accent); /* Change color to accent on hover */
+    transform: rotate(180deg) scale(1.1); /* More dramatic rotate */
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Media queries adjustments for banner */
+@media (max-width: 480px) {
+    #offer-banner {
+        /* ... existing styles ... */
+        width: calc(100% - 30px); /* Full width with padding */
+        left: 15px;
+        right: 15px;
+        bottom: 15px;
+        padding: 20px;
+        box-sizing: border-box; /* Ensure padding is included in width */
+    }
+}
+
+
+
+
+
