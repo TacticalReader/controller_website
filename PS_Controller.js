@@ -15,6 +15,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const testimonialCards = document.querySelectorAll('.testimonial-card');
   const scrollToTopBtn = document.querySelector('#scroll-to-top');
   const newsletterForm = document.querySelector('#newsletter-form');
+  const offerBanner = document.querySelector('#offer-banner');
+  const offerCloseBtn = document.querySelector('#offer-close-btn');
+  const offerViewLaterBtn = document.querySelector('#offer-view-later-btn');
+  const hoursEl = document.querySelector('#hours');
+  const minutesEl = document.querySelector('#minutes');
+  const secondsEl = document.querySelector('#seconds');
 
   // --- State ---
   const controllerImages = {
@@ -23,6 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
     red: './ps4-controller-png-42109.png',
   };
   let currentTestimonialIndex = 0;
+  let countdownInterval;
 
   // --- Functions ---
 
@@ -145,6 +152,56 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
+  // --- Offer Banner Functions ---
+
+  // Hides the offer banner
+  const hideOfferBanner = () => {
+    if (offerBanner) {
+      offerBanner.classList.remove('visible');
+    }
+  };
+
+  // Shows the offer banner
+  const showOfferBanner = () => {
+    // Check session storage first. If banner was closed, don't show it.
+    if (sessionStorage.getItem('offerBannerClosed') === 'true') {
+      return;
+    }
+    if (offerBanner) {
+      offerBanner.classList.add('visible');
+      startCountdown();
+    }
+  };
+
+  // Starts the countdown timer
+  const startCountdown = () => {
+    if (!hoursEl || !minutesEl || !secondsEl) return;
+
+    countdownInterval = setInterval(() => {
+      const now = new Date();
+      const endOfDay = new Date(now);
+      endOfDay.setHours(23, 59, 59, 999); // Set to end of the current day
+
+      const timeLeft = endOfDay.getTime() - now.getTime();
+
+      if (timeLeft < 0) {
+        clearInterval(countdownInterval);
+        hoursEl.textContent = '00';
+        minutesEl.textContent = '00';
+        secondsEl.textContent = '00';
+        return;
+      }
+
+      const hours = Math.floor((timeLeft / (1000 * 60 * 60)) % 24);
+      const minutes = Math.floor((timeLeft / 1000 / 60) % 60);
+      const seconds = Math.floor((timeLeft / 1000) % 60);
+
+      hoursEl.textContent = String(hours).padStart(2, '0');
+      minutesEl.textContent = String(minutes).padStart(2, '0');
+      secondsEl.textContent = String(seconds).padStart(2, '0');
+    }, 1000);
+  };
+
   // --- Intersection Observer for Animations ---
   const observerOptions = {
     root: null,
@@ -214,6 +271,23 @@ document.addEventListener('DOMContentLoaded', () => {
     newsletterForm.addEventListener('submit', handleNewsletterSubmit);
   }
 
+  // Offer Banner Listeners
+  if (offerCloseBtn) {
+    offerCloseBtn.addEventListener('click', () => {
+      hideOfferBanner();
+      // Set a flag in session storage so it doesn't appear again
+      sessionStorage.setItem('offerBannerClosed', 'true');
+      if (countdownInterval) clearInterval(countdownInterval);
+    });
+  }
+
+  if (offerViewLaterBtn) {
+    offerViewLaterBtn.addEventListener('click', () => {
+      hideOfferBanner();
+      if (countdownInterval) clearInterval(countdownInterval);
+    });
+  }
+
   window.addEventListener('scroll', handleScroll);
 
   // --- Initial State & Timers ---
@@ -223,4 +297,7 @@ document.addEventListener('DOMContentLoaded', () => {
     testimonialCards[0].classList.add('active');
     setInterval(rotateTestimonials, 5000); // Rotate every 5 seconds
   }
+
+  // Delayed appearance for the offer banner
+  setTimeout(showOfferBanner, 5000); // Show banner after 5 seconds
 });
