@@ -919,6 +919,121 @@ transform: scale(1.1);
 }
 
 /*====================================
+OFFER BANNER
+====================================*/
+#offer-banner {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    width: 340px;
+    background-color: var(--secondary);
+    color: var(--primary);
+    border-radius: var(--border-radius);
+    padding: 25px;
+    box-shadow: 0 10px 30px var(--hover-shadow);
+    z-index: 1600;
+    opacity: 0;
+    transform: translateY(50px);
+    visibility: hidden;
+    transition: opacity 0.5s ease-out, transform 0.5s ease-out, visibility 0.5s;
+    border-top: 4px solid var(--accent);
+}
+
+#offer-banner.visible {
+    opacity: 1;
+    transform: translateY(0);
+    visibility: visible;
+}
+
+.offer-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 15px;
+    color: var(--primary);
+}
+
+.offer-countdown {
+    font-size: 2.2rem;
+    font-weight: 900;
+    margin-bottom: 10px;
+    letter-spacing: 2px;
+    color: var(--accent);
+    text-align: center;
+    background-color: rgba(255, 255, 255, 0.05);
+    padding: 10px;
+    border-radius: 8px;
+}
+
+.offer-countdown span {
+    display: inline-block;
+    min-width: 50px;
+}
+
+.offer-text {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.offer-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.offer-claim-btn, .offer-later-btn {
+    flex-grow: 1;
+    padding: 12px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+.offer-claim-btn {
+    background-color: var(--accent);
+    color: var(--primary);
+}
+
+.offer-claim-btn:hover {
+    background-color: #ff3742;
+    transform: translateY(-2px);
+}
+
+.offer-later-btn {
+    background-color: transparent;
+    color: var(--primary);
+    border: 2px solid #444;
+}
+
+.offer-later-btn:hover {
+    background-color: #444;
+    color: var(--primary);
+}
+
+#offer-close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-size: 1.5rem;
+    line-height: 1;
+    cursor: pointer;
+    padding: 5px;
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+
+#offer-close-btn:hover {
+    color: var(--primary);
+    transform: rotate(90deg);
+}
+
+/*====================================
 MEDIA QUERIES
 ====================================*/
 @media (max-width: 1100px) {
@@ -1014,4 +1129,14 @@ MEDIA QUERIES
         width: 90%;
         height: 550px;
     }
+
+    #offer-banner {
+        width: calc(100% - 30px);
+        left: 15px;
+        right: 15px;
+        bottom: 15px;
+        padding: 20px;
+    }
+    .offer-title { font-size: 1.3rem; }
+    .offer-countdown { font-size: 1.8rem; }
 }
