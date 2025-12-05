@@ -264,15 +264,15 @@
             </div>
         </div>
         <div class="footer-bottom">
-            <p class="copyright">&copy; 2024 GameSphere. All Rights Reserved.</p>
+            <p class="copyright">&copy; <span id="copyright-year">2024</span> GameSphere. All Rights Reserved.</p>
             <div class="social-links">
                 <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
                 <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
                 <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
             </div>
         </div>
-        <div class="footer-credits">
-            <p><i class="fas fa-code"></i> Designed & Programmed by Tanmay Srivastava <a href="https://github.com/TacticalReader" target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i> TacticalReader</a></p>
+        <div id="developer-credits" class="footer-credits" role="button" tabindex="0" aria-label="View developer profile">
+            <p><i class="fas fa-code"></i> Designed & Programmed by <span class="developer-name">Tanmay Srivastava</span> <a href="https://github.com/TacticalReader" target="_blank" rel="noopener noreferrer" class="developer-github-link"><i class="fab fa-github"></i> TacticalReader</a></p>
         </div>
     </footer>
 
@@ -328,6 +328,25 @@
         <div class="offer-buttons">
             <button class="offer-claim-btn"><i class="fas fa-tag"></i> Claim Now</button>
             <button id="offer-view-later-btn" class="offer-later-btn"><i class="fas fa-clock"></i> View Later</button>
+        </div>
+    </div>
+
+    <!-- Developer Profile Modal -->
+    <div id="developer-modal-overlay">
+        <div class="developer-modal-content" role="dialog" aria-modal="true" aria-labelledby="developer-modal-name">
+            <button id="developer-modal-close-btn" aria-label="Close developer profile"><i class="fas fa-times"></i></button>
+            <div class="developer-profile">
+                <img id="developer-avatar" src="https://i.pravatar.cc/150?u=tanmay" alt="Developer's profile picture">
+                <h3 id="developer-modal-name">Tanmay Srivastava</h3>
+                <p class="developer-bio">
+                    A passionate Full-Stack Developer dedicated to building elegant, efficient, and user-friendly web applications. Turning ideas into reality through code.
+                </p>
+                <div class="developer-social-links">
+                    <a href="https://github.com/TacticalReader" target="_blank" rel="noopener noreferrer" aria-label="GitHub Profile"><i class="fab fa-github"></i></a>
+                    <a href="#" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn Profile"><i class="fab fa-linkedin"></i></a>
+                    <a href="#" target="_blank" rel="noopener noreferrer" aria-label="Portfolio Website"><i class="fas fa-globe"></i></a>
+                </div>
+            </div>
         </div>
     </div>
 
