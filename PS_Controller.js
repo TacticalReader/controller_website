@@ -67,6 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!hamburgerMenu || !navMenu) return;
     const isOpen = navMenu.classList.toggle('menu-open');
     hamburgerMenu.classList.toggle('active');
+    hamburgerMenu.setAttribute('aria-expanded', isOpen);
     document.body.style.overflow = isOpen ? 'hidden' : 'auto';
   };
 
@@ -101,10 +102,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const handleSmoothScroll = (event) => {
     event.preventDefault();
     const targetId = event.currentTarget.getAttribute('href');
-    if (!targetId || targetId === '#') {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-        return;
-    }
+    if (!targetId) return;
+
     const targetElement = document.querySelector(targetId);
     if (targetElement) {
       const headerOffset = 90;
@@ -185,7 +184,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const openTestimonialModal = (index) => {
     stopTestimonialRotation();
     const card = testimonialCards[index];
-    if (!card) return;
+    if (!card || !modalOverlay) return;
 
     const avatarSrc = card.querySelector('.testimonial-avatar img').src;
     const authorName = card.querySelector('cite').textContent;
@@ -204,6 +203,7 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   const closeTestimonialModal = () => {
+    if (!modalOverlay) return;
     modalOverlay.classList.remove('visible');
     document.body.style.overflow = 'auto';
     startTestimonialRotation();
@@ -237,10 +237,7 @@ document.addEventListener('DOMContentLoaded', () => {
     input.setAttribute('aria-invalid', 'false');
 
     const email = input.value.trim();
-    const emailRegex = /^[^
-s@]+@[^
-s@]+\.[^
-s@]+$/;
+    const emailRegex = /^[^\[\s@]+@\[^\s@]+\.\[^\s@]+$/;
 
     if (email && emailRegex.test(email)) {
       form.classList.add('subscribed');
@@ -323,7 +320,7 @@ s@]+$/;
   };
 
   const handleExitIntent = (e) => {
-    if (e.clientY < 50 && !exitIntentTriggered && !offerBanner.classList.contains('visible') && localStorage.getItem('offerBannerClosed') !== 'true' && localStorage.getItem('offerExpired') !== 'true') {
+    if (e.clientY < 50 && !exitIntentTriggered && offerBanner && !offerBanner.classList.contains('visible') && localStorage.getItem('offerBannerClosed') !== 'true' && localStorage.getItem('offerExpired') !== 'true') {
         showOfferBanner();
         exitIntentTriggered = true;
     }
@@ -353,7 +350,7 @@ s@]+$/;
   });
 
   navLinks.forEach(link => {
-    if (link.tagName === 'A') link.addEventListener('click', handleSmoothScroll);
+    link.addEventListener('click', handleSmoothScroll);
   });
 
   if (scrollToTopBtn) scrollToTopBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
@@ -446,7 +443,7 @@ s@]+$/;
     copyrightYearEl.textContent = new Date().getFullYear();
   }
 
-  if (testimonialCards.length > 0) {
+  if (testimonialCards.length > 0 && testimonialDotsContainer) {
     testimonialCards.forEach((_, index) => {
         const dot = document.createElement('button');
         dot.classList.add('testimonial-dot');
