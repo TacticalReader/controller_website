@@ -23,6 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const secondsEl = document.querySelector('#seconds');
   const offerTitleEl = offerBanner ? offerBanner.querySelector('.offer-title') : null;
   const offerTextEl = offerBanner ? offerBanner.querySelector('.offer-text') : null;
+  const copyrightYearEl = document.querySelector('#copyright-year');
 
   // --- Testimonial Carousel Selectors ---
   const testimonialContainer = document.querySelector('.testimonial-carousel-container');
@@ -40,6 +41,11 @@ document.addEventListener('DOMContentLoaded', () => {
   const modalAuthorTitle = document.querySelector('#modal-author-details span');
   const modalRating = document.getElementById('modal-rating');
   const modalQuote = document.getElementById('modal-quote');
+
+  // --- Developer Modal Selectors ---
+  const developerCreditsTrigger = document.querySelector('#developer-credits');
+  const developerModalOverlay = document.getElementById('developer-modal-overlay');
+  const developerModalCloseBtn = document.getElementById('developer-modal-close-btn');
 
   // --- State ---
   const controllerImages = {
@@ -203,6 +209,19 @@ document.addEventListener('DOMContentLoaded', () => {
     startTestimonialRotation();
   };
 
+  // --- Developer Modal Functions ---
+  const openDeveloperModal = () => {
+    if (!developerModalOverlay) return;
+    developerModalOverlay.classList.add('visible');
+    document.body.style.overflow = 'hidden';
+  };
+
+  const closeDeveloperModal = () => {
+    if (!developerModalOverlay) return;
+    developerModalOverlay.classList.remove('visible');
+    document.body.style.overflow = 'auto';
+  };
+
   // Handles newsletter form submission
   const handleNewsletterSubmit = (event) => {
     event.preventDefault();
@@ -218,7 +237,10 @@ document.addEventListener('DOMContentLoaded', () => {
     input.setAttribute('aria-invalid', 'false');
 
     const email = input.value.trim();
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const emailRegex = /^[^
+s@]+@[^
+s@]+\.[^
+s@]+$/;
 
     if (email && emailRegex.test(email)) {
       form.classList.add('subscribed');
@@ -400,11 +422,17 @@ document.addEventListener('DOMContentLoaded', () => {
   if (modalCloseBtn) modalCloseBtn.addEventListener('click', closeTestimonialModal);
   if (modalOverlay) modalOverlay.addEventListener('click', (e) => e.target === modalOverlay && closeTestimonialModal());
 
+  // Developer Modal Listeners
+  if (developerCreditsTrigger) developerCreditsTrigger.addEventListener('click', openDeveloperModal);
+  if (developerModalCloseBtn) developerModalCloseBtn.addEventListener('click', closeDeveloperModal);
+  if (developerModalOverlay) developerModalOverlay.addEventListener('click', (e) => e.target === developerModalOverlay && closeDeveloperModal());
+
   // Global Keydown Listener
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
       if (loginContainer && loginContainer.classList.contains('visible')) toggleLoginModal();
       if (modalOverlay && modalOverlay.classList.contains('visible')) closeTestimonialModal();
+      if (developerModalOverlay && developerModalOverlay.classList.contains('visible')) closeDeveloperModal();
     }
   });
 
@@ -413,6 +441,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // --- Initializations ---
   changeControllerColor('black');
+
+  if (copyrightYearEl) {
+    copyrightYearEl.textContent = new Date().getFullYear();
+  }
 
   if (testimonialCards.length > 0) {
     testimonialCards.forEach((_, index) => {
