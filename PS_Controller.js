@@ -1,4 +1,4 @@
-\document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', () => {
   // --- Element Selectors ---
   const header = document.querySelector('header');
   const hamburgerMenu = document.querySelector('.hamburger-menu');
