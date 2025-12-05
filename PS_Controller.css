@@ -950,6 +950,13 @@ OFFER BANNER
     font-weight: 700;
     margin-bottom: 15px;
     color: var(--primary);
+    display: flex;
+    align-items: center;
+}
+
+.offer-title i {
+    margin-right: 10px;
+    color: var(--accent);
 }
 
 .offer-countdown {
@@ -990,7 +997,13 @@ OFFER BANNER
     font-weight: 700;
     font-size: 1rem;
     transition: all 0.3s ease;
-    text-align: center;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.offer-claim-btn i, .offer-later-btn i {
+    margin-right: 8px;
 }
 
 .offer-claim-btn {
