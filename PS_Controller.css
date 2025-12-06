@@ -1096,6 +1096,12 @@ margin-bottom: 12px;
 color: rgba(255, 255, 255, 0.8);
 text-decoration: none;
 transition: color 0.3s ease, padding-left 0.3s ease;
+display: inline-flex;
+align-items: center;
+}
+
+.footer-column ul a i {
+    margin-right: 8px;
 }
 
 .footer-column ul a:hover {
