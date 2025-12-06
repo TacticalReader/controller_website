@@ -25,6 +25,11 @@ document.addEventListener('DOMContentLoaded', () => {
   const offerTextEl = offerBanner ? offerBanner.querySelector('.offer-text') : null;
   const copyrightYearEl = document.querySelector('#copyright-year');
 
+  // --- Spec Pop-up Selectors ---
+  const specPopupContainer = document.getElementById('spec-popup-container');
+  const specPopupTitle = document.getElementById('spec-popup-title');
+  const specPopupDetails = document.getElementById('spec-popup-details');
+
   // --- Testimonial Carousel Selectors ---
   const testimonialContainer = document.querySelector('.testimonial-carousel-container');
   const testimonialCards = document.querySelectorAll('.testimonial-card');
@@ -59,6 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let exitIntentTriggered = false;
   let touchStartX = 0;
   let touchEndX = 0;
+  let activeSpecItem = null; // Track the currently active spec item for the pop-up
 
   // --- Functions ---
 
@@ -128,6 +134,63 @@ document.addEventListener('DOMContentLoaded', () => {
     if (scrollToTopBtn) {
       scrollToTopBtn.classList.toggle('visible', window.scrollY > 300);
     }
+  };
+
+  // --- Specifications Pop-up Functions ---
+  const openSpecPopup = (item) => {
+    if (!specPopupContainer || !item) return;
+    
+    if (activeSpecItem) {
+        closeSpecPopup();
+    }
+
+    activeSpecItem = item;
+    const title = item.dataset.title;
+    const details = item.dataset.details;
+
+    specPopupTitle.textContent = title;
+    specPopupDetails.textContent = details;
+
+    specPopupContainer.classList.add('visible');
+
+    positionSpecPopup(item);
+  };
+
+  const positionSpecPopup = (item) => {
+    if (!specPopupContainer || !item) return;
+
+    const itemRect = item.getBoundingClientRect();
+    const popupRect = specPopupContainer.getBoundingClientRect();
+    const popupMargin = 15;
+
+    let top, left;
+
+    left = itemRect.left + (itemRect.width / 2) - (popupRect.width / 2);
+
+    if (itemRect.top > popupRect.height + popupMargin) {
+        top = itemRect.top - popupRect.height - popupMargin;
+        specPopupContainer.classList.remove('popup-from-top');
+        specPopupContainer.classList.add('popup-from-bottom');
+    } else {
+        top = itemRect.bottom + popupMargin;
+        specPopupContainer.classList.remove('popup-from-bottom');
+        specPopupContainer.classList.add('popup-from-top');
+    }
+
+    if (left < 10) left = 10;
+    if (left + popupRect.width > window.innerWidth - 10) {
+        left = window.innerWidth - popupRect.width - 10;
+    }
+
+    specPopupContainer.style.top = `${top}px`;
+    specPopupContainer.style.left = `${left}px`;
+  };
+
+  const closeSpecPopup = () => {
+    if (specPopupContainer) {
+        specPopupContainer.classList.remove('visible');
+    }
+    activeSpecItem = null;
   };
 
   // --- Testimonial Carousel Functions ---
@@ -237,7 +300,7 @@ document.addEventListener('DOMContentLoaded', () => {
     input.setAttribute('aria-invalid', 'false');
 
     const email = input.value.trim();
-    const emailRegex = /^[^\[\s@]+@\[^\s@]+\.\[^\s@]+$/;
+    const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
 
     if (email && emailRegex.test(email)) {
       form.classList.add('subscribed');
@@ -356,6 +419,17 @@ document.addEventListener('DOMContentLoaded', () => {
   if (scrollToTopBtn) scrollToTopBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
   if (newsletterForm) newsletterForm.addEventListener('submit', handleNewsletterSubmit);
 
+  // Spec Item Pop-up Listeners
+  specItems.forEach(item => {
+    item.addEventListener('click', () => openSpecPopup(item));
+    item.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            openSpecPopup(item);
+        }
+    });
+  });
+
   // Offer Banner Listeners
   if (offerCloseBtn) {
     offerCloseBtn.addEventListener('click', () => {
@@ -430,10 +504,25 @@ document.addEventListener('DOMContentLoaded', () => {
       if (loginContainer && loginContainer.classList.contains('visible')) toggleLoginModal();
       if (modalOverlay && modalOverlay.classList.contains('visible')) closeTestimonialModal();
       if (developerModalOverlay && developerModalOverlay.classList.contains('visible')) closeDeveloperModal();
+      if (activeSpecItem) closeSpecPopup();
     }
   });
 
-  window.addEventListener('scroll', handleScroll);
+  // Global Click Listener for closing pop-ups
+  document.addEventListener('click', (e) => {
+    if (activeSpecItem && !activeSpecItem.contains(e.target) && !specPopupContainer.contains(e.target)) {
+        closeSpecPopup();
+    }
+  });
+
+  const combinedScrollHandler = () => {
+    handleScroll();
+    if (activeSpecItem) {
+        closeSpecPopup();
+    }
+  };
+
+  window.addEventListener('scroll', combinedScrollHandler, { passive: true });
   document.addEventListener('mouseleave', handleExitIntent);
 
   // --- Initializations ---
