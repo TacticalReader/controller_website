@@ -52,6 +52,13 @@ document.addEventListener('DOMContentLoaded', () => {
   const developerModalOverlay = document.getElementById('developer-modal-overlay');
   const developerModalCloseBtn = document.getElementById('developer-modal-close-btn');
 
+  // --- Feature Detail Modal Selectors ---
+  const featureModalOverlay = document.getElementById('feature-detail-modal-overlay');
+  const featureModalCloseBtn = document.getElementById('feature-detail-modal-close-btn');
+  const featureModalTitle = document.getElementById('feature-modal-title');
+  const featureModalDescription = document.getElementById('feature-modal-description');
+  const featureModalMedia = document.getElementById('feature-modal-media');
+
   // --- State ---
   const controllerImages = {
     black: './ps4-controller-png-42098.png',
@@ -287,6 +294,29 @@ document.addEventListener('DOMContentLoaded', () => {
     document.body.style.overflow = 'auto';
   };
 
+  // --- Feature Detail Modal Functions ---
+  const openFeatureModal = (cardElement) => {
+    if (!cardElement || !featureModalOverlay) return;
+
+    const title = cardElement.dataset.modalFullTitle;
+    const description = cardElement.dataset.modalLongDescription;
+    const mediaSrc = cardElement.dataset.modalMediaSrc;
+    // const mediaType = cardElement.dataset.modalMediaType; // For future use if video is added
+
+    featureModalTitle.innerHTML = title; // Use innerHTML to render icons
+    featureModalDescription.textContent = description;
+    featureModalMedia.src = mediaSrc;
+
+    featureModalOverlay.classList.add('visible');
+    document.body.style.overflow = 'hidden';
+  };
+
+  const closeFeatureModal = () => {
+    if (!featureModalOverlay) return;
+    featureModalOverlay.classList.remove('visible');
+    document.body.style.overflow = 'auto';
+  };
+
   // Handles newsletter form submission
   const handleNewsletterSubmit = (event) => {
     event.preventDefault();
@@ -302,7 +332,10 @@ document.addEventListener('DOMContentLoaded', () => {
     input.setAttribute('aria-invalid', 'false');
 
     const email = input.value.trim();
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const emailRegex = /^[^
+\s@]+@[^
+\s@]+\.[^
+\s@]+$/;
 
     if (email && emailRegex.test(email)) {
       form.classList.add('subscribed');
@@ -432,6 +465,20 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+  // Feature Card Modal Listeners
+  featureCards.forEach(card => {
+    card.addEventListener('click', () => openFeatureModal(card));
+    card.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            openFeatureModal(card);
+        }
+    });
+  });
+
+  if (featureModalCloseBtn) featureModalCloseBtn.addEventListener('click', closeFeatureModal);
+  if (featureModalOverlay) featureModalOverlay.addEventListener('click', (e) => e.target === featureModalOverlay && closeFeatureModal());
+
   // Offer Banner Listeners
   if (offerCloseBtn) {
     offerCloseBtn.addEventListener('click', () => {
@@ -506,6 +553,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (loginContainer && loginContainer.classList.contains('visible')) toggleLoginModal();
       if (modalOverlay && modalOverlay.classList.contains('visible')) closeTestimonialModal();
       if (developerModalOverlay && developerModalOverlay.classList.contains('visible')) closeDeveloperModal();
+      if (featureModalOverlay && featureModalOverlay.classList.contains('visible')) closeFeatureModal();
       if (activeSpecItem) closeSpecPopup();
     }
   });
