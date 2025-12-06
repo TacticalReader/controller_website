@@ -116,35 +116,47 @@
         <section id="specs" class="specs-section">
             <h2 class="section-title">Technical Specifications</h2>
             <div class="specs-grid">
-                <div class="spec-item">
-                    <i class="fas fa-wifi spec-icon"></i>
-                    <h3 class="spec-title">Connectivity</h3>
-                    <p class="spec-details">Bluetooth 4.0, USB-C</p>
-                </div>
-                <div class="spec-item">
-                    <i class="fas fa-battery-full spec-icon"></i>
-                    <h3 class="spec-title">Battery Life</h3>
-                    <p class="spec-details">Up to 12 hours</p>
-                </div>
-                <div class="spec-item">
+                <div class="spec-item spec-item--large" role="button" tabindex="0"
+                     data-title="Haptic Feedback"
+                     data-details="Dual actuators replace traditional rumble motors, allowing you to feel physically responsive feedback to your in-game actions, from subtle textures to powerful explosions.">
                     <i class="fas fa-wave-square spec-icon"></i>
                     <h3 class="spec-title">Haptic Feedback</h3>
-                    <p class="spec-details">Dual Actuators</p>
+                    <p class="spec-details"><strong>Dual Actuators</strong></p>
                 </div>
-                <div class="spec-item">
+                <div class="spec-item spec-item--large" role="button" tabindex="0"
+                     data-title="Adaptive Triggers"
+                     data-details="Experience varying levels of force and tension as you interact with your in-game gear and environments. Feel the tension of a bowstring or the kickback of a weapon.">
                     <i class="fas fa-fingerprint spec-icon"></i>
                     <h3 class="spec-title">Adaptive Triggers</h3>
-                    <p class="spec-details">Dynamic Resistance L2/R2</p>
+                    <p class="spec-details"><strong>Dynamic Resistance</strong> L2/R2</p>
                 </div>
-                <div class="spec-item">
+                <div class="spec-item" role="button" tabindex="0"
+                     data-title="Connectivity"
+                     data-details="Features robust Bluetooth 4.0 for a stable wireless connection and a modern USB-C port for charging and wired play.">
+                    <i class="fas fa-wifi spec-icon"></i>
+                    <h3 class="spec-title">Connectivity</h3>
+                    <p class="spec-details"><strong>Bluetooth 4.0</strong>, USB-C</p>
+                </div>
+                <div class="spec-item" role="button" tabindex="0"
+                     data-title="Battery Life"
+                     data-details="The integrated rechargeable battery provides up to 12 hours of gameplay on a single charge, keeping you in the action longer.">
+                    <i class="fas fa-battery-full spec-icon"></i>
+                    <h3 class="spec-title">Battery Life</h3>
+                    <p class="spec-details">Up to <strong>12 hours</strong></p>
+                </div>
+                <div class="spec-item" role="button" tabindex="0"
+                     data-title="Weight"
+                     data-details="Engineered for comfort, the controller weighs just 280g, making it balanced and easy to hold during extended gaming sessions.">
                     <i class="fas fa-weight-hanging spec-icon"></i>
                     <h3 class="spec-title">Weight</h3>
-                    <p class="spec-details">280g (9.87 oz)</p>
+                    <p class="spec-details"><strong>280g</strong> (9.87 oz)</p>
                 </div>
-                <div class="spec-item">
+                <div class="spec-item" role="button" tabindex="0"
+                     data-title="Built-in Microphone"
+                     data-details="Chat with friends online using the built-in microphone, or connect a headset via the 3.5mm jack. Easily mute voice capture with the dedicated mute button.">
                     <i class="fas fa-microphone spec-icon"></i>
                     <h3 class="spec-title">Built-in Microphone</h3>
-                    <p class="spec-details">Integrated Mic & Mute Button</p>
+                    <p class="spec-details">Integrated Mic & <strong>Mute Button</strong></p>
                 </div>
             </div>
         </section>
@@ -224,6 +236,14 @@
                 </div>
                 <div id="modal-rating"></div>
                 <blockquote id="modal-quote"></blockquote>
+            </div>
+        </div>
+
+        <!-- Spec Detail Pop-up -->
+        <div id="spec-popup-container">
+            <div id="spec-popup-content">
+                <h4 id="spec-popup-title"></h4>
+                <p id="spec-popup-details"></p>
             </div>
         </div>
 
