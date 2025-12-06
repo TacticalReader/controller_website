@@ -321,6 +321,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const handleNewsletterSubmit = (event) => {
     event.preventDefault();
     const form = event.target;
+    if (form.classList.contains('subscribed')) return; // Prevent re-submission
+
     const input = form.querySelector('#newsletter-email');
     const button = form.querySelector('button');
     const message = form.querySelector('#newsletter-feedback');
@@ -332,10 +334,7 @@ document.addEventListener('DOMContentLoaded', () => {
     input.setAttribute('aria-invalid', 'false');
 
     const email = input.value.trim();
-    const emailRegex = /^[^
-\s@]+@[^
-\s@]+\.[^
-\s@]+$/;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     if (email && emailRegex.test(email)) {
       form.classList.add('subscribed');
