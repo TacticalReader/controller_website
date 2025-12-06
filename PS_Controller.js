@@ -168,13 +168,15 @@ document.addEventListener('DOMContentLoaded', () => {
     left = itemRect.left + (itemRect.width / 2) - (popupRect.width / 2);
 
     if (itemRect.top > popupRect.height + popupMargin) {
+        // Position popup ABOVE the item, so the pointer should point down.
         top = itemRect.top - popupRect.height - popupMargin;
-        specPopupContainer.classList.remove('popup-from-top');
-        specPopupContainer.classList.add('popup-from-bottom');
-    } else {
-        top = itemRect.bottom + popupMargin;
         specPopupContainer.classList.remove('popup-from-bottom');
         specPopupContainer.classList.add('popup-from-top');
+    } else {
+        // Position popup BELOW the item, so the pointer should point up.
+        top = itemRect.bottom + popupMargin;
+        specPopupContainer.classList.remove('popup-from-top');
+        specPopupContainer.classList.add('popup-from-bottom');
     }
 
     if (left < 10) left = 10;
@@ -300,7 +302,7 @@ document.addEventListener('DOMContentLoaded', () => {
     input.setAttribute('aria-invalid', 'false');
 
     const email = input.value.trim();
-    const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     if (email && emailRegex.test(email)) {
       form.classList.add('subscribed');
