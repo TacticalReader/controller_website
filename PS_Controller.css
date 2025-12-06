@@ -437,15 +437,15 @@ padding: 80px 0;
 
 .specs-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-template-columns: repeat(4, 1fr);
   gap: 30px;
-  max-width: 900px;
+  max-width: 1100px;
   margin: 0 auto;
 }
 
 .spec-item {
   background-color: var(--background-light);
-  padding: 25px;
+  padding: 30px;
   border-radius: var(--border-radius);
   box-shadow: 0 4px 12px var(--card-shadow);
   display: flex;
@@ -453,8 +453,14 @@ padding: 80px 0;
   align-items: center;
   text-align: center;
   opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 0.5s ease, transform 0.5s ease, box-shadow 0.3s ease;
+  transform: translateY(30px);
+  transition: all 0.5s ease, border 0.3s ease;
+  border: 2px solid transparent;
+  cursor: pointer;
+}
+
+.spec-item--large {
+    grid-column: span 2;
 }
 
 .spec-item.is-visible {
@@ -463,6 +469,7 @@ padding: 80px 0;
 }
 
 /* Staggered animation delay */
+.spec-item:nth-child(1) { transition-delay: 0.0s; }
 .spec-item:nth-child(2) { transition-delay: 0.1s; }
 .spec-item:nth-child(3) { transition-delay: 0.2s; }
 .spec-item:nth-child(4) { transition-delay: 0.3s; }
@@ -470,26 +477,100 @@ padding: 80px 0;
 .spec-item:nth-child(6) { transition-delay: 0.5s; }
 
 .spec-item:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 20px var(--hover-shadow);
+  transform: translateY(-8px);
+  box-shadow: 0 12px 25px var(--hover-shadow);
+  border-color: var(--accent);
 }
 
 .spec-icon {
-  font-size: 2.5rem;
+  font-size: 3rem;
   color: var(--accent);
-  margin-bottom: 15px;
+  margin-bottom: 20px;
+  transition: transform 0.6s 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.spec-item.is-visible .spec-icon {
+    transform: scale(1);
 }
 
 .spec-title {
   font-weight: 700;
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   color: var(--secondary);
-  margin-bottom: 8px;
+  margin-bottom: 10px;
 }
 
 .spec-details {
   color: var(--text-muted);
   font-size: 1rem;
+  line-height: 1.5;
+}
+
+.spec-details strong {
+    font-weight: 700;
+    color: var(--secondary);
+}
+
+/*====================================
+SPECIFICATIONS POP-UP
+====================================*/
+#spec-popup-container {
+    position: fixed;
+    background: var(--secondary);
+    color: var(--primary);
+    padding: 20px 25px;
+    border-radius: var(--border-radius);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    z-index: 2500;
+    width: 100%;
+    max-width: 320px;
+    opacity: 0;
+    visibility: hidden;
+    transform: scale(0.95) translateY(10px);
+    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease;
+    pointer-events: none;
+}
+
+#spec-popup-container.visible {
+    opacity: 1;
+    visibility: visible;
+    transform: scale(1) translateY(0);
+}
+
+#spec-popup-container::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-style: solid;
+}
+
+#spec-popup-container.popup-from-top::after {
+    top: 100%;
+    border-width: 10px 10px 0 10px;
+    border-color: var(--secondary) transparent transparent transparent;
+}
+
+#spec-popup-container.popup-from-bottom::after {
+    bottom: 100%;
+    border-width: 0 10px 10px 10px;
+    border-color: transparent transparent var(--secondary) transparent;
+}
+
+#spec-popup-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin: 0 0 10px 0;
+    color: var(--accent);
+}
+
+#spec-popup-details {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin: 0;
+    color: rgba(255, 255, 255, 0.9);
 }
 
 /*====================================
@@ -1387,7 +1468,17 @@ OFFER BANNER
 MEDIA QUERIES
 ====================================*/
 @media (max-width: 1100px) {
-    .features-section, .specs-section, .testimonials-section { width: 90%; }
+    .features-section, .testimonials-section { width: 90%; }
+    .specs-section { 
+        width: 90%; 
+    }
+    .specs-grid {
+        grid-template-columns: repeat(2, 1fr);
+        max-width: 700px;
+    }
+    .spec-item--large {
+        grid-column: span 2;
+    }
 }
 
 @media (max-width: 768px) {
@@ -1478,6 +1569,14 @@ MEDIA QUERIES
 
     .testimonial-nav-btn.next {
         right: -10px;
+    }
+
+    .specs-grid {
+        grid-template-columns: 1fr;
+        max-width: 100%;
+    }
+    .spec-item--large {
+        grid-column: span 1;
     }
 }
 
