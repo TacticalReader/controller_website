@@ -151,13 +151,6 @@
                             <stop offset="0%" stop-color="#e74c3c" stop-opacity="0.8"/>
                             <stop offset="100%" stop-color="#c0392b" stop-opacity="0.5"/>
                         </radialGradient>
-                        <!-- Patterns for High Contrast -->
-                        <pattern id="low-pressure-pattern" patternUnits="userSpaceOnUse" width="8" height="8">
-                            <circle cx="4" cy="4" r="2" fill="black"/>
-                        </pattern>
-                        <pattern id="high-pressure-pattern" patternUnits="userSpaceOnUse" width="8" height="8">
-                            <path d="M-2,2 l4,-4 M0,8 l8,-8 M6,10 l4,-4" stroke="black" stroke-width="1"/>
-                        </pattern>
                     </defs>
                     <!-- Low Pressure Zones (Palm Grips) -->
                     <path class="low-pressure" d="M 50,150 C 20,200 80,300 120,250 Q 150,220 130,180 Z" data-tooltip="Palm Support Zone: Contoured to fit naturally, reducing long-term fatigue."/>
@@ -171,11 +164,6 @@
             <div class="audio-controls">
                 <button id="mute-btn" aria-label="Mute sounds" aria-pressed="false">
                     <i class="fas fa-volume-up"></i>
-                </button>
-            </div>
-            <div class="heatmap-controls">
-                <button id="heatmap-contrast-toggle" class="cta-button-secondary" aria-pressed="false">
-                    <i class="fas fa-adjust"></i> Toggle High Contrast
                 </button>
             </div>
         </section>
