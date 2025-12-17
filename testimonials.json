@@ -1,0 +1,110 @@
+[
+  {
+    "username": "xX_ShadowSlayer_Xx",
+    "rank": "Pro Gamer",
+    "avatar": "https://i.pravatar.cc/150?u=gamer1",
+    "verified": true,
+    "quote": "The haptic feedback is a total game-changer. You don't just play the game, you FEEL it. Absolutely incredible immersion.",
+    "hoursPlayed": 1200,
+    "rating": 5
+  },
+  {
+    "username": "PixelPrincess",
+    "rank": "Streamer",
+    "avatar": "https://i.pravatar.cc/150?u=gamer2",
+    "verified": true,
+    "quote": "I was skeptical about the adaptive triggers, but now I can't imagine playing without them. The tension is so realistic.",
+    "hoursPlayed": 850,
+    "rating": 5
+  },
+  {
+    "username": "RetroGamerDave",
+    "rank": "Casual",
+    "avatar": "https://i.pravatar.cc/150?u=gamer3",
+    "verified": false,
+    "quote": "Finally, a controller that feels truly 'next-gen'. The build quality is superb and it's incredibly comfortable for long sessions.",
+    "hoursPlayed": 400,
+    "rating": 4.5
+  },
+  {
+    "username": "CodeWizard",
+    "rank": "Tech Reviewer",
+    "avatar": "https://i.pravatar.cc/150?u=gamer4",
+    "verified": true,
+    "quote": "The latency is practically zero. From a technical standpoint, this is an engineering marvel. Highly recommended for competitive play.",
+    "hoursPlayed": 250,
+    "rating": 4.8
+  },
+  {
+    "username": "SpeedRunnerJen",
+    "rank": "Pro Gamer",
+    "avatar": "https://i.pravatar.cc/150?u=gamer5",
+    "verified": true,
+    "quote": "The ergonomic design has saved my hands during 24-hour charity streams. It's lightweight but feels incredibly solid.",
+    "hoursPlayed": 2500,
+    "rating": 5
+  },
+  {
+    "username": "CasualCarl",
+    "rank": "Casual",
+    "avatar": "https://i.pravatar.cc/150?u=gamer6",
+    "verified": true,
+    "quote": "I just play on weekends, but this controller makes every session feel special. The battery life is also a huge plus!",
+    "hoursPlayed": 150,
+    "rating": 4.5
+  },
+  {
+    "username": "MysticMia",
+    "rank": "Streamer",
+    "avatar": "https://i.pravatar.cc/150?u=gamer7",
+    "verified": true,
+    "quote": "My viewers love the look of the red controller on stream! It performs as good as it looks. The built-in mic is surprisingly clear.",
+    "hoursPlayed": 980,
+    "rating": 4.7
+  },
+  {
+    "username": "NoScopeNinja",
+    "rank": "Pro Gamer",
+    "avatar": "https://i.pravatar.cc/150?u=gamer8",
+    "verified": false,
+    "quote": "The analog sticks are the most precise I've ever used. My accuracy has definitely improved since I switched.",
+    "hoursPlayed": 1800,
+    "rating": 4.9
+  },
+  {
+    "username": "IndieExplorer",
+    "rank": "Casual",
+    "avatar": "https://i.pravatar.cc/150?u=gamer9",
+    "verified": true,
+    "quote": "Playing atmospheric indie games with the haptic feedback is a whole new experience. It adds so much to the storytelling.",
+    "hoursPlayed": 600,
+    "rating": 5
+  },
+  {
+    "username": "VR_Voyager",
+    "rank": "Tech Reviewer",
+    "avatar": "https://i.pravatar.cc/150?u=gamer10",
+    "verified": true,
+    "quote": "While not a VR controller, its features feel like a step in that direction. The sense of touch it provides is unparalleled.",
+    "hoursPlayed": 300,
+    "rating": 4.6
+  },
+  {
+    "username": "RPG_Queen",
+    "rank": "Streamer",
+    "avatar": "https://i.pravatar.cc/150?u=gamer11",
+    "verified": true,
+    "quote": "Charging with USB-C is a lifesaver. I can use the same cable for all my devices. It's the little things!",
+    "hoursPlayed": 1100,
+    "rating": 4.8
+  },
+  {
+    "username": "TacticalTom",
+    "rank": "Pro Gamer",
+    "avatar": "https://i.pravatar.cc/150?u=gamer12",
+    "verified": true,
+    "quote": "The adaptive triggers on this are a must-have for shooters. You can feel the break point on your trigger pull. Insane advantage.",
+    "hoursPlayed": 3100,
+    "rating": 5
+  }
+]
