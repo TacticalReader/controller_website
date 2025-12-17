@@ -9,6 +9,7 @@
 --border-radius: 12px;
 --gradient-start: #ff4757;
 --gradient-end: #a2323b;
+--font-mono: 'Roboto Mono', monospace;
 }
 
 /*====================================
@@ -484,63 +485,140 @@ font-weight: 400;
 INTERACTIVE COLOR SECTION
 ====================================*/
 .color-section {
-width: 80%;
-margin: auto;
-display: flex;
-flex-direction: column;
-justify-content: center;
-align-items: center;
-padding: 80px 0;
-text-align: center;
+    width: 80%;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 80px 0;
+    text-align: center;
+    overflow-x: hidden; /* Prevent horizontal scroll during transitions */
 }
 
-.color-buttons {
-display: flex;
-gap: 20px;
-margin-bottom: 40px;
+.loadout-selector {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 50px;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
-.color-buttons button {
-color: var(--primary);
-font-weight: 700;
-padding: 12px 25px;
-font-size: 1.1rem;
-border: none;
-border-radius: 50px;
-box-shadow: 0 4px 12px var(--card-shadow);
-cursor: pointer;
-transition: all 0.3s ease;
+.loadout-item {
+    background-color: var(--secondary);
+    color: var(--primary);
+    border: 2px solid #444;
+    padding: 15px 30px;
+    font-family: var(--font-mono);
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    cursor: pointer;
+    position: relative;
+    clip-path: polygon(10% 0%, 90% 0%, 100% 50%, 90% 100%, 10% 100%, 0% 50%);
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+    min-width: 280px;
+    text-align: center;
 }
 
-.color-buttons button:hover {
-transform: translateY(-5px);
-box-shadow: 0 10px 25px var(--hover-shadow);
+.loadout-item:hover {
+    background-color: #2a2a2a;
+    border-color: var(--accent);
 }
 
-.color-buttons .color-black {
-background-color: var(--secondary);
+.loadout-item:focus-visible {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 10px var(--accent);
 }
 
-.color-buttons .color-white {
-background-color: whitesmoke;
-color: var(--secondary);
+.reticle {
+    position: absolute;
+    top: -2px; left: -2px;
+    width: calc(100% + 4px);
+    height: calc(100% + 4px);
+    stroke: var(--accent);
+    stroke-width: 3;
+    fill: none;
+    opacity: 0;
+    transform: scale(0.95);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+    pointer-events: none;
 }
 
-.color-buttons .color-red {
-background-color: var(--accent);
+.loadout-item.active .reticle {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.loadout-item.active {
+    border-color: var(--accent);
+    background-color: #252525;
 }
 
 .interactive-image-container {
-max-width: 480px;
-min-width: 60px;
-margin-bottom: 45px;
-position: relative;
+    max-width: 480px;
+    min-width: 60px;
+    height: 360px; /* Set a fixed height to contain the image */
+    margin-bottom: 20px;
+    position: relative;
+    perspective: 1000px;
 }
 
 .interactive-image-container img {
-width: 100%;
-filter: drop-shadow(0 15px 30px rgba(0,0,0,0.2));
-transition: opacity 0.3s ease, transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    width: 100%;
+    filter: drop-shadow(0 15px 30px rgba(0,0,0,0.2));
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* Animation classes for image transition */
+@keyframes slideOutLeft {
+    from { transform: translateX(0); opacity: 1; }
+    to { transform: translateX(-150%); opacity: 0; }
+}
+@keyframes slideInFromRight {
+    from { transform: translateX(150%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+.slide-out {
+    animation: slideOutLeft 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.slide-in {
+    animation: slideInFromRight 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.audio-controls {
+    margin-top: 20px;
+}
+
+#mute-btn {
+    background: var(--background-light);
+    border: 2px solid #ddd;
+    color: var(--secondary);
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#mute-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    transform: scale(1.1);
+}
+
+#mute-btn.muted {
+    background-color: var(--accent);
+    color: var(--primary);
+    border-color: var(--accent);
 }
 
 /*====================================
@@ -1665,9 +1743,13 @@ MEDIA QUERIES
         display: flex;
     }
 
-    .color-buttons {
-        flex-wrap: wrap;
-        justify-content: center;
+    .loadout-selector {
+        gap: 10px;
+    }
+
+    .loadout-item {
+        min-width: 240px;
+        padding: 12px 25px;
     }
 
     .footer-grid {
@@ -1703,9 +1785,10 @@ MEDIA QUERIES
     .hero-subtitle { font-size: 1rem; }
     .hero-buttons { flex-direction: column; gap: 15px; }
 
-    .color-buttons {
+    .loadout-selector {
         flex-direction: column;
         gap: 15px;
+        width: 90%;
     }
 
     header nav ul { width: 250px; }
