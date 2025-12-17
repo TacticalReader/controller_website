@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="PS_Controller.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@400;700;900&family=Roboto+Mono:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     
     <link rel="icon" href="./controller.png" type="image/png">
@@ -122,15 +122,23 @@
         </section>
 
         <section id="colors" class="color-section">
-            <h2 class="section-title">Available in 3 Different Colors</h2>
-            <div class="color-buttons">
-                <button class="color-black" data-color="black" aria-label="Select Black Controller">Black</button>
-                <button class="color-white" data-color="white" aria-label="Select White Controller">White</button>
-                <button class="color-red" data-color="red" aria-label="Select Red Controller">Red</button>
+            <h2 class="section-title">CHOOSE YOUR LOADOUT</h2>
+            <div class="loadout-selector">
+                <button class="loadout-item active" data-color="black" aria-label="Select Midnight Black skin">
+                    <svg class="reticle" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M10,0 V10 H0 M90,0 V10 H100 M10,100 V90 H0 M90,100 V90 H100"></path></svg>
+                    <span class="skin-name">SKIN: MIDNIGHT BLACK</span>
+                </button>
+                <button class="loadout-item" data-color="white" aria-label="Select Glacier White skin">
+                    <svg class="reticle" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M10,0 V10 H0 M90,0 V10 H100 M10,100 V90 H0 M90,100 V90 H100"></path></svg>
+                    <span class="skin-name">SKIN: GLACIER WHITE</span>
+                </button>
+                <button class="loadout-item" data-color="red" aria-label="Select Magma Red skin">
+                    <svg class="reticle" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M10,0 V10 H0 M90,0 V10 H100 M10,100 V90 H0 M90,100 V90 H100"></path></svg>
+                    <span class="skin-name">SKIN: MAGMA RED</span>
+                </button>
             </div>
             <div class="interactive-image-container">
-                <img src="./ps4-controller-png-42098.png" alt="Interactive PS4 Controller showing the currently selected color" class="interactive-controller-image">
-                <!-- Ergonomic Heatmap SVG Overlay -->
+                <!-- The image will now be dynamically inserted here by JS -->
                 <svg id="controller-heatmap-svg" viewBox="0 0 480 360" xmlns="http://www.w3.org/2000/svg" aria-labelledby="heatmap-title" role="img">
                     <title id="heatmap-title">Ergonomic heatmap of the controller showing pressure points.</title>
                     <defs>
@@ -159,6 +167,11 @@
                     <path class="high-pressure" d="M 300,240 A 40 40 0 1 0 280,280" data-tooltip="High Strain Point: Our anti-slip texture reduces sweat accumulation by 40% here."/>
                 </svg>
                 <div id="heatmap-tooltip" role="tooltip" class="visually-hidden"></div>
+            </div>
+            <div class="audio-controls">
+                <button id="mute-btn" aria-label="Mute sounds" aria-pressed="false">
+                    <i class="fas fa-volume-up"></i>
+                </button>
             </div>
             <div class="heatmap-controls">
                 <button id="heatmap-contrast-toggle" class="cta-button-secondary" aria-pressed="false">
@@ -368,6 +381,9 @@
             </div>
         </div>
     </div>
+
+    <audio id="audio-hover" src="sounds/tick.wav" preload="auto"></audio>
+    <audio id="audio-select" src="sounds/clunk.wav" preload="auto"></audio>
 
     <script src="PS_Controller.js"></script>
 </body>
