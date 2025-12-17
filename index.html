@@ -353,19 +353,17 @@
 
     <!-- Developer Profile Modal -->
     <div id="developer-modal-overlay">
-        <div class="developer-modal-content" role="dialog" aria-modal="true" aria-labelledby="developer-modal-name">
-            <button id="developer-modal-close-btn" aria-label="Close developer profile"><i class="fas fa-times"></i></button>
-            <div class="developer-profile">
-                <img id="developer-avatar" src="https://i.pravatar.cc/150?u=tanmay" alt="Developer's profile picture">
-                <h3 id="developer-modal-name">Tanmay Srivastava</h3>
-                <p class="developer-bio">
-                    A passionate Full-Stack Developer dedicated to building elegant, efficient, and user-friendly web applications. Turning ideas into reality through code.
-                </p>
-                <div class="developer-social-links">
-                    <a href="https://github.com/TacticalReader" target="_blank" rel="noopener noreferrer" aria-label="GitHub Profile"><i class="fab fa-github"></i></a>
-                    <a href="#" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn Profile"><i class="fab fa-linkedin"></i></a>
-                    <a href="#" target="_blank" rel="noopener noreferrer" aria-label="Portfolio Website"><i class="fas fa-globe"></i></a>
-                </div>
+        <div class="scanlines"></div>
+        <div class="developer-modal-content" role="dialog" aria-modal="true" aria-labelledby="developer-modal-title">
+            <svg class="modal-border" preserveAspectRatio="none" viewBox="0 0 100 100">
+                <rect x="0" y="0" width="100" height="100" />
+            </svg>
+            <button id="developer-modal-close-btn" aria-label="Close developer credits"><i class="fas fa-times"></i></button>
+            <h3 id="developer-modal-title" class="modal-title">
+                <i class="fas fa-users"></i> PROJECT CONTRIBUTORS
+            </h3>
+            <div class="developer-cards-container">
+                <!-- Skeleton loader and contributor cards will be injected here by JS -->
             </div>
         </div>
     </div>
