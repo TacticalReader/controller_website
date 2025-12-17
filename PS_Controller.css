@@ -1284,158 +1284,204 @@ transform: scale(1.1);
 }
 
 /*====================================
-OFFER BANNER
+MISSION TOAST NOTIFICATION
 ====================================*/
-@keyframes bannerPulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.01); }
-    100% { transform: scale(1); }
+@keyframes toast-slide-in {
+    from { transform: translateY(100px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
 }
 
-@keyframes iconBounce {
+@keyframes icon-bounce {
     0%, 100% { transform: translateY(0); }
-    25%, 75% { transform: translateY(-5px); }
-    50% { transform: translateY(-1px); }
+    50% { transform: translateY(-5px); }
 }
 
-#offer-banner {
+@keyframes fab-pulse {
+    0% { box-shadow: 0 0 0 0 rgba(255, 71, 87, 0.7); }
+    70% { box-shadow: 0 0 0 15px rgba(255, 71, 87, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(255, 71, 87, 0); }
+}
+
+#mission-toast {
     position: fixed;
     bottom: 25px;
     right: 25px;
-    width: 340px;
+    z-index: 1600;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+#mission-toast.visible {
+    opacity: 1;
+    visibility: visible;
+    animation: toast-slide-in 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+.mission-toast-expanded {
+    width: 350px;
     background: linear-gradient(135deg, var(--secondary) 0%, #333 100%);
     color: var(--primary);
     border-radius: var(--border-radius);
-    padding: 25px;
+    padding: 20px;
     box-shadow: 0 12px 35px var(--hover-shadow);
-    z-index: 1600;
-    opacity: 0;
-    transform: translateY(50px);
-    visibility: hidden;
-    transition: opacity 0.6s ease-out, transform 0.6s ease-out, visibility 0.6s;
     border-top: 4px solid var(--accent);
-    animation: bannerPulse 5s infinite ease-in-out;
+    position: relative;
+    transition: transform 0.4s ease, opacity 0.4s ease;
 }
 
-#offer-banner.visible {
-    opacity: 1;
-    transform: translateY(0);
-    visibility: visible;
+.mission-toast-minimized {
+    display: none;
 }
 
-.offer-title {
-    font-size: 1.5rem;
+#mission-toast.minimized .mission-toast-expanded {
+    transform: scale(0.8);
+    opacity: 0;
+    pointer-events: none;
+}
+
+#mission-toast.minimized .mission-toast-minimized {
+    display: block;
+}
+
+.mission-title {
+    font-size: 1.4rem;
     font-weight: 700;
-    margin-bottom: 15px;
+    margin: 0 0 15px 0;
     color: var(--primary);
     display: flex;
     align-items: center;
 }
 
-.offer-title i {
-    margin-right: 10px;
+.mission-title i {
+    margin-right: 12px;
     color: var(--accent);
-    animation: iconBounce 2s infinite ease-in-out;
+    animation: icon-bounce 2s infinite ease-in-out;
 }
 
-.offer-countdown {
-    font-size: 2.2rem;
+.mission-countdown {
+    font-size: 2rem;
     font-weight: 900;
     margin-bottom: 10px;
-    letter-spacing: 3px;
+    letter-spacing: 2px;
     color: var(--accent);
     text-align: center;
     background: rgba(255, 255, 255, 0.08);
-    padding: 10px;
+    padding: 8px;
     border-radius: 8px;
-    border: 1px solid var(--accent);
-    box-shadow: inset 0 0 10px rgba(0,0,0,0.2);
 }
 
-.offer-countdown span {
-    display: inline-block;
-    min-width: 50px;
-    text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
-}
-
-.offer-text {
+.mission-text {
     font-size: 0.9rem;
     color: rgba(255, 255, 255, 0.8);
     margin-bottom: 20px;
     text-align: center;
 }
 
-.offer-buttons {
+.mission-buttons {
     display: flex;
     gap: 10px;
 }
 
-.offer-claim-btn, .offer-later-btn {
+.mission-claim-btn, .mission-minimize-btn {
     flex-grow: 1;
     padding: 12px;
     border-radius: 8px;
     border: none;
     cursor: pointer;
     font-weight: 700;
-    font-size: 1rem;
+    font-size: 0.95rem;
     transition: all 0.3s ease;
     display: inline-flex;
     align-items: center;
     justify-content: center;
 }
 
-.offer-claim-btn i, .offer-later-btn i {
+.mission-claim-btn i, .mission-minimize-btn i {
     margin-right: 8px;
 }
 
-.offer-claim-btn {
+.mission-claim-btn {
     background: linear-gradient(45deg, var(--gradient-start), var(--gradient-end));
     color: var(--primary);
     box-shadow: 0 6px 15px rgba(255, 71, 87, 0.4);
 }
 
-.offer-claim-btn:hover {
-    background: linear-gradient(45deg, #ff3742, #b53d47);
-    transform: translateY(-3px);
-    box-shadow: 0 10px 25px rgba(255, 71, 87, 0.6);
+.mission-claim-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(255, 71, 87, 0.5);
 }
 
-.offer-later-btn {
+.mission-minimize-btn {
     background-color: transparent;
     color: var(--primary);
     border: 2px solid rgba(255, 255, 255, 0.3);
+    flex-grow: 0;
+    padding: 12px 15px;
 }
 
-.offer-later-btn:hover {
+.mission-minimize-btn:hover {
     background-color: rgba(255, 255, 255, 0.1);
     border-color: var(--primary);
-    color: var(--primary);
 }
 
-#offer-close-btn {
+#mission-close-btn {
     position: absolute;
-    top: 10px;
-    right: 10px;
-    background-color: rgba(255, 255, 255, 0.1);
+    top: 8px;
+    right: 8px;
+    background: transparent;
     border: none;
     color: var(--text-muted);
     font-size: 1.5rem;
-    line-height: 1;
     cursor: pointer;
     transition: color 0.3s ease, transform 0.3s ease;
-    border-radius: 50%;
     width: 30px;
     height: 30px;
+}
+
+#mission-close-btn:hover {
+    color: var(--accent);
+    transform: rotate(90deg);
+}
+
+/* Minimized FAB State */
+.mission-fab {
+    position: relative;
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(45deg, var(--gradient-start), var(--gradient-end));
+    border-radius: 50%;
+    border: none;
+    color: var(--primary);
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+    font-size: 1.5rem;
+    cursor: pointer;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    animation: fab-pulse 2s infinite;
+    transition: transform 0.3s ease;
 }
 
-#offer-close-btn:hover {
-    color: var(--accent);
-    transform: rotate(180deg) scale(1.1);
-    background-color: rgba(255, 255, 255, 0.2);
+.mission-fab:hover {
+    transform: scale(1.1);
+    animation-play-state: paused;
+}
+
+.mission-progress-ring {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+}
+
+.mission-progress-ring__circle {
+    transition: stroke-dashoffset 1s linear;
+    stroke: var(--primary);
+    stroke-width: 4;
+    fill: transparent;
 }
 
 /*====================================
@@ -1559,14 +1605,16 @@ MEDIA QUERIES
         height: 550px;
     }
 
-    #offer-banner {
+    #mission-toast {
         width: calc(100% - 30px);
         left: 15px;
         right: 15px;
         bottom: 15px;
-        padding: 20px;
-        box-sizing: border-box;
     }
-    .offer-title { font-size: 1.3rem; }
-    .offer-countdown { font-size: 1.8rem; }
+    .mission-toast-expanded {
+        width: 100%;
+        padding: 15px;
+    }
+    .mission-title { font-size: 1.2rem; }
+    .mission-countdown { font-size: 1.6rem; }
 }
