@@ -6,9 +6,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const hamburgerMenu = document.querySelector('.hamburger-menu');
   const navMenu = document.querySelector('header nav ul');
   const navLinks = document.querySelectorAll('.smooth-scroll');
-  const colorButtons = document.querySelectorAll('.color-buttons button');
-  const interactiveImage = document.querySelector('.interactive-controller-image');
+  const loadoutItems = document.querySelectorAll('.loadout-item');
+  const interactiveImageContainer = document.querySelector('.interactive-image-container');
   const heroImage = document.querySelector('.hero-controller-image');
+  const muteBtn = document.getElementById('mute-btn');
+  const audioHover = document.getElementById('audio-hover');
+  const audioSelect = document.getElementById('audio-select');
   const loginTrigger = document.querySelector('#login-btn');
   const loginContainer = document.querySelector('#login-container');
   const loginCloseBtn = document.querySelector('#login-close-btn');
@@ -64,6 +67,8 @@ document.addEventListener('DOMContentLoaded', () => {
   let exitIntentTriggered = false;
   let activeSpecItem = null; // Track the currently active spec item for the pop-up
   let lastScrollY = window.scrollY;
+  let isMuted = false;
+  let isTransitioning = false; // Prevent spamming color changes
 
   // --- Functions ---
 
@@ -118,8 +123,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.querySelectorAll('nav a.active').forEach(link => link.classList.remove('active'));
                 if (navLink) {
                     navLink.classList.add('active');
-                    // Optional: Update URL hash without jumping
-                    // history.replaceState(null, null, `#${id}`);
                 }
             }
         });
@@ -144,24 +147,84 @@ document.addEventListener('DOMContentLoaded', () => {
     document.body.classList.toggle('no-scroll', isVisible);
   };
 
-  // Changes the controller image based on the selected color
+  // Plays a sound if not muted
+  const playSound = (audioEl) => {
+      if (!isMuted && audioEl) {
+          audioEl.currentTime = 0;
+          audioEl.play().catch(error => console.error("Audio play failed:", error));
+      }
+  };
+
+  // Toggles sound mute state
+  const toggleMute = () => {
+      if (!muteBtn) return;
+      isMuted = !isMuted;
+      muteBtn.classList.toggle('muted', isMuted);
+      muteBtn.setAttribute('aria-pressed', String(isMuted));
+      const icon = muteBtn.querySelector('i');
+      if (isMuted) {
+          icon.classList.remove('fa-volume-up');
+          icon.classList.add('fa-volume-mute');
+          muteBtn.setAttribute('aria-label', 'Unmute sounds');
+      } else {
+          icon.classList.remove('fa-volume-mute');
+          icon.classList.add('fa-volume-up');
+          muteBtn.setAttribute('aria-label', 'Mute sounds');
+      }
+  };
+
+  // Changes the controller image based on the selected color with a slide animation
   const changeControllerColor = (color) => {
-    if (!controllerImages[color]) return;
+      if (!controllerImages[color] || isTransitioning || !interactiveImageContainer) return;
 
-    const imagesToUpdate = [interactiveImage, heroImage].filter(Boolean);
+      const currentActiveItem = document.querySelector('.loadout-item.active');
+      if (currentActiveItem && currentActiveItem.dataset.color === color) return;
 
-    imagesToUpdate.forEach(img => {
-        img.style.opacity = '0.5';
-        img.style.transform = 'scale(0.95)';
-    });
+      isTransitioning = true;
+      playSound(audioSelect);
 
-    setTimeout(() => {
-        imagesToUpdate.forEach(img => {
-            img.src = controllerImages[color];
-            img.style.opacity = '1';
-            img.style.transform = 'scale(1)';
-        });
-    }, 200);
+      // Update active state on buttons
+      loadoutItems.forEach(item => item.classList.remove('active'));
+      const newItem = document.querySelector(`.loadout-item[data-color="${color}"]`);
+      if (newItem) newItem.classList.add('active');
+
+      // Handle image transition
+      const currentImage = interactiveImageContainer.querySelector('img');
+      if (currentImage) {
+          currentImage.classList.add('slide-out');
+          currentImage.addEventListener('animationend', () => {
+              currentImage.remove();
+          }, { once: true });
+      }
+
+      const newImage = document.createElement('img');
+      newImage.src = controllerImages[color];
+      newImage.alt = `Interactive controller showing the ${color} skin`;
+      newImage.classList.add('slide-in');
+      interactiveImageContainer.appendChild(newImage);
+
+      newImage.addEventListener('animationend', () => {
+          isTransitioning = false;
+      }, { once: true });
+
+      // Also update the static hero image (with a simple fade)
+      if (heroImage) {
+          heroImage.style.opacity = '0.5';
+          setTimeout(() => {
+              heroImage.src = controllerImages[color];
+              heroImage.style.opacity = '1';
+          }, 200);
+      }
+  };
+
+  // Initial setup for the first image
+  const initControllerImage = () => {
+      if (interactiveImageContainer && !interactiveImageContainer.querySelector('img')) {
+          const initialImage = document.createElement('img');
+          initialImage.src = controllerImages['black'];
+          initialImage.alt = 'Interactive controller showing the black skin';
+          interactiveImageContainer.appendChild(initialImage);
+      }
   };
 
   // Handles smooth scrolling for navigation links
@@ -514,7 +577,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       contrastToggle.addEventListener('click', () => {
           const isPressed = contrastToggle.getAttribute('aria-pressed') === 'true';
-          contrastToggle.setAttribute('aria-pressed', !isPressed);
+          contrastToggle.setAttribute('aria-pressed', String(!isPressed));
           heatmapSvg.classList.toggle('high-contrast');
       });
   };
@@ -538,9 +601,12 @@ document.addEventListener('DOMContentLoaded', () => {
   if (loginCloseBtn) loginCloseBtn.addEventListener('click', toggleLoginModal);
   if (loginContainer) loginContainer.addEventListener('click', (e) => e.target === loginContainer && toggleLoginModal());
 
-  colorButtons.forEach(button => {
-    button.addEventListener('click', () => changeControllerColor(button.dataset.color));
+  loadoutItems.forEach(item => {
+      item.addEventListener('click', () => changeControllerColor(item.dataset.color));
+      item.addEventListener('mouseenter', () => playSound(audioHover));
   });
+
+  if (muteBtn) muteBtn.addEventListener('click', toggleMute);
 
   navLinks.forEach(link => {
     link.addEventListener('click', handleSmoothScroll);
@@ -597,7 +663,8 @@ document.addEventListener('DOMContentLoaded', () => {
   document.addEventListener('mouseleave', handleExitIntent);
 
   // --- Initializations ---
-  changeControllerColor('black');
+  initControllerImage();
+  if (heroImage) heroImage.src = controllerImages['black']; // Sync hero image
 
   if (copyrightYearEl) {
     copyrightYearEl.textContent = new Date().getFullYear();
