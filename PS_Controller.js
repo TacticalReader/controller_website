@@ -60,14 +60,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const isOpen = navMenu.classList.toggle('menu-open');
     hamburgerMenu.classList.toggle('active');
     hamburgerMenu.setAttribute('aria-expanded', isOpen);
-    document.body.style.overflow = isOpen ? 'hidden' : 'auto';
+    document.body.classList.toggle('no-scroll', isOpen);
   };
 
   // Toggles the login modal visibility
   const toggleLoginModal = () => {
     if (!loginContainer) return;
     const isVisible = loginContainer.classList.toggle('visible');
-    document.body.style.overflow = isVisible ? 'hidden' : 'auto';
+    document.body.classList.toggle('no-scroll', isVisible);
   };
 
   // Changes the controller image based on the selected color
@@ -255,7 +255,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const fetchAndInitTestimonials = async () => {
       if (!victoryWallGrid) return;
       try {
-          const response = await fetch('./data/testimonials.json');
+          const response = await fetch('./testimonials.json');
           if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
           allTestimonials = await response.json();
           if (allTestimonials.length > 0) {
@@ -274,13 +274,13 @@ document.addEventListener('DOMContentLoaded', () => {
   const openDeveloperModal = () => {
     if (!developerModalOverlay) return;
     developerModalOverlay.classList.add('visible');
-    document.body.style.overflow = 'hidden';
+    document.body.classList.add('no-scroll');
   };
 
   const closeDeveloperModal = () => {
     if (!developerModalOverlay) return;
     developerModalOverlay.classList.remove('visible');
-    document.body.style.overflow = 'auto';
+    document.body.classList.remove('no-scroll');
   };
 
   // Handles newsletter form submission
