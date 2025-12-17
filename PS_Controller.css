@@ -56,6 +56,38 @@ text-align: center;
 }
 
 /*====================================
+ACCESSIBILITY & PROGRESS
+====================================*/
+.skip-link {
+  position: absolute;
+  top: -100px;
+  left: 10px;
+  background: var(--secondary);
+  color: var(--primary);
+  padding: 10px 15px;
+  z-index: 9999;
+  transition: top 0.3s ease-in-out;
+  border-radius: 0 0 8px 8px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
+#progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 4px;
+  background: var(--accent);
+  width: 0%;
+  z-index: 2000;
+  transition: width 0.1s linear;
+}
+
+/*====================================
 HEADER & NAVIGATION
 ====================================*/
 header{
@@ -68,11 +100,16 @@ position: fixed;
 top: 0;
 left: 5%;
 z-index: 1000;
-background: rgba(255, 255, 255, 0.9);
+background: rgba(26, 26, 26, 0.8);
 backdrop-filter: blur(10px);
+-webkit-backdrop-filter: blur(10px);
 border-radius: 0 0 var(--border-radius) var(--border-radius);
-transition: all 0.3s ease;
+transition: transform 0.4s ease-in-out, box-shadow 0.3s ease;
 min-height: 75px;
+}
+
+header.header--hidden {
+    transform: translateY(-100%);
 }
 
 header.scrolled {
@@ -92,13 +129,9 @@ transition: transform 0.3s ease;
 }
 
 .logo h2 a {
-color: var(--secondary);
+color: var(--primary);
 font-size: 1.5rem;
 font-weight: 700;
-background: linear-gradient(45deg, var(--secondary), var(--accent));
--webkit-background-clip: text;
--webkit-text-fill-color: transparent;
-background-clip: text;
 text-decoration: none;
 }
 
@@ -120,12 +153,17 @@ header nav ul li a {
 display: flex;
 align-items: center;
 padding: 25px 0;
-color: var(--secondary);
+color: var(--primary);
 font-weight: 700;
 cursor: pointer;
 transition: all 0.3s ease;
 position: relative;
 text-decoration: none;
+}
+
+header nav ul li a.active {
+    color: var(--accent);
+    text-shadow: 0 0 8px var(--accent);
 }
 
 header nav ul li a i {
@@ -178,7 +216,7 @@ padding: 5px;
 }
 
 .hamburger-menu span{
-background-color: var(--secondary);
+background-color: var(--primary);
 margin: 3px 0;
 height: 3px;
 width: 28px;
@@ -1525,7 +1563,7 @@ MEDIA QUERIES
         right: -100%;
         width: 300px;
         height: 100vh;
-        background: var(--primary);
+        background: var(--secondary);
         flex-direction: column;
         justify-content: flex-start;
         align-items: flex-start;
@@ -1541,7 +1579,7 @@ MEDIA QUERIES
     header nav ul li {
         width: 100%;
         margin-right: 0;
-        border-bottom: 1px solid #eee;
+        border-bottom: 1px solid #444;
     }
 
     header nav ul li a, header nav ul li .nav-button {
