@@ -45,6 +45,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const developerModalOverlay = document.getElementById('developer-modal-overlay');
   const developerModalCloseBtn = document.getElementById('developer-modal-close-btn');
 
+  // --- Heatmap Selectors ---
+  const ergonomicCard = document.getElementById('ergonomic-card');
+  const heatmapSvg = document.getElementById('controller-heatmap-svg');
+  const heatmapTooltip = document.getElementById('heatmap-tooltip');
+  const contrastToggle = document.getElementById('heatmap-contrast-toggle');
+
   // --- State ---
   const controllerImages = {
     black: './ps4-controller-png-42098.png',
@@ -472,6 +478,47 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
+  // --- Ergonomic Heatmap Functions ---
+  const initHeatmap = () => {
+      if (!ergonomicCard || !heatmapSvg || !heatmapTooltip || !contrastToggle) return;
+
+      const heatmapZones = heatmapSvg.querySelectorAll('path[data-tooltip]');
+
+      ergonomicCard.addEventListener('mouseenter', () => {
+          heatmapSvg.classList.add('visible');
+      });
+
+      ergonomicCard.addEventListener('mouseleave', () => {
+          heatmapSvg.classList.remove('visible');
+      });
+
+      heatmapZones.forEach(zone => {
+          zone.addEventListener('mouseenter', (e) => {
+              const tooltipText = zone.dataset.tooltip;
+              if (tooltipText) {
+                  heatmapTooltip.textContent = tooltipText;
+                  heatmapTooltip.classList.add('visible');
+              }
+          });
+
+          zone.addEventListener('mousemove', (e) => {
+              // Position tooltip above the cursor
+              heatmapTooltip.style.left = `${e.clientX}px`;
+              heatmapTooltip.style.top = `${e.clientY}px`;
+          });
+
+          zone.addEventListener('mouseleave', () => {
+              heatmapTooltip.classList.remove('visible');
+          });
+      });
+
+      contrastToggle.addEventListener('click', () => {
+          const isPressed = contrastToggle.getAttribute('aria-pressed') === 'true';
+          contrastToggle.setAttribute('aria-pressed', !isPressed);
+          heatmapSvg.classList.toggle('high-contrast');
+      });
+  };
+
   // --- Intersection Observer for Fade-in Animations ---
   const observer = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
@@ -558,6 +605,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   fetchAndInitTestimonials();
   initScrollSpy();
+  initHeatmap();
 
   setTimeout(initMissionToast, 5000);
 });
