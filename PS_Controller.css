@@ -1631,18 +1631,6 @@ ERGONOMIC HEATMAP
 .low-pressure { fill: url(#low-pressure-grad); }
 .high-pressure { fill: url(#high-pressure-grad); }
 
-/* High Contrast Mode */
-#controller-heatmap-svg.high-contrast .low-pressure {
-    fill: url(#low-pressure-pattern);
-    mix-blend-mode: normal;
-    opacity: 0.6;
-}
-#controller-heatmap-svg.high-contrast .high-pressure {
-    fill: url(#high-pressure-pattern);
-    mix-blend-mode: normal;
-    opacity: 0.6;
-}
-
 #heatmap-tooltip {
     position: fixed;
     background-color: var(--secondary);
@@ -1664,12 +1652,6 @@ ERGONOMIC HEATMAP
     opacity: 1;
     visibility: visible;
     transform: translate(-50%, -120%);
-}
-
-.heatmap-controls {
-    text-align: center;
-    margin-top: -20px;
-    margin-bottom: 40px;
 }
 
 /*====================================
