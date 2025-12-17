@@ -290,17 +290,27 @@
       </div>
     </div>
 
-    <!-- Delayed Slide-In Offer Banner -->
-    <div id="offer-banner">
-        <button id="offer-close-btn" aria-label="Close Offer"><i class="fas fa-times"></i></button>
-        <h3 class="offer-title"><i class="fas fa-gift"></i> Flash Sale Unlocked!</h3>
-        <div id="offer-countdown" class="offer-countdown">
-            <span id="hours">00</span>:<span id="minutes">00</span>:<span id="seconds">00</span>
+    <!-- Gamified Mission Toast -->
+    <div id="mission-toast" role="status" aria-live="polite">
+        <div class="mission-toast-expanded">
+            <button id="mission-close-btn" aria-label="Dismiss Mission"><i class="fas fa-times"></i></button>
+            <h3 class="mission-title"><i class="fas fa-trophy"></i> New Mission Available!</h3>
+            <div class="mission-countdown">
+                <span id="hours">00</span>:<span id="minutes">00</span>:<span id="seconds">00</span>
+            </div>
+            <p class="mission-text">Complete your purchase before the timer runs out to claim your reward!</p>
+            <div class="mission-buttons">
+                <button class="mission-claim-btn"><i class="fas fa-check"></i> Accept Mission</button>
+                <button id="mission-minimize-btn" class="mission-minimize-btn" aria-label="Minimize Mission"><i class="fas fa-compress-alt"></i></button>
+            </div>
         </div>
-        <p class="offer-text">Ends at midnight. Don't miss out!</p>
-        <div class="offer-buttons">
-            <button class="offer-claim-btn"><i class="fas fa-tag"></i> Claim Now</button>
-            <button id="offer-view-later-btn" class="offer-later-btn"><i class="fas fa-clock"></i> View Later</button>
+        <div class="mission-toast-minimized">
+            <button id="mission-maximize-btn" class="mission-fab" aria-label="Expand Mission">
+                <i class="fas fa-trophy"></i>
+                <svg class="mission-progress-ring" width="60" height="60">
+                    <circle class="mission-progress-ring__circle" stroke="white" stroke-width="4" fill="transparent" r="28" cx="30" cy="30"/>
+                </svg>
+            </button>
         </div>
     </div>
 
