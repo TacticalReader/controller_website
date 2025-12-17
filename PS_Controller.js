@@ -1,6 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
   // --- Element Selectors ---
   const header = document.querySelector('header');
+  const progressBar = document.getElementById('progress-bar');
+  const sections = document.querySelectorAll('main section[id]');
   const hamburgerMenu = document.querySelector('.hamburger-menu');
   const navMenu = document.querySelector('header nav ul');
   const navLinks = document.querySelectorAll('.smooth-scroll');
@@ -55,8 +57,70 @@ document.addEventListener('DOMContentLoaded', () => {
   let countdownInterval;
   let exitIntentTriggered = false;
   let activeSpecItem = null; // Track the currently active spec item for the pop-up
+  let lastScrollY = window.scrollY;
 
   // --- Functions ---
+
+  // Handles scroll-based UI changes: progress bar, header visibility, scroll-to-top button
+  const handleScroll = () => {
+    const currentScrollY = window.scrollY;
+
+    // Progress Bar
+    if (progressBar) {
+        const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        const scrolled = (currentScrollY / scrollHeight) * 100;
+        progressBar.style.width = `${scrolled}%`;
+    }
+
+    // Hide/Show Header
+    if (header) {
+        if (currentScrollY > 100 && currentScrollY > lastScrollY) {
+            header.classList.add('header--hidden');
+        } else {
+            header.classList.remove('header--hidden');
+        }
+        header.classList.toggle('scrolled', currentScrollY > 20);
+    }
+
+    // Scroll-to-top button
+    if (scrollToTopBtn) {
+      scrollToTopBtn.classList.toggle('visible', currentScrollY > 300);
+    }
+
+    // Close spec pop-up on scroll
+    if (activeSpecItem) {
+        closeSpecPopup();
+    }
+
+    lastScrollY = currentScrollY <= 0 ? 0 : currentScrollY;
+  };
+
+  // Intersection Observer for Scroll-Spying
+  const initScrollSpy = () => {
+    if (!sections.length) return;
+
+    const observerOptions = {
+        rootMargin: '-80px 0px -50% 0px', // Trigger when section is in the upper part of the viewport
+        threshold: 0
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            const id = entry.target.getAttribute('id');
+            const navLink = document.querySelector(`nav a[href="#${id}"]`);
+            if (entry.isIntersecting) {
+                document.querySelectorAll('nav a.active').forEach(link => link.classList.remove('active'));
+                if (navLink) {
+                    navLink.classList.add('active');
+                    // Optional: Update URL hash without jumping
+                    // history.replaceState(null, null, `#${id}`);
+                }
+            }
+        });
+    }, observerOptions);
+
+    sections.forEach(section => observer.observe(section));
+  };
 
   // Toggles the mobile navigation menu
   const toggleMobileMenu = () => {
@@ -113,16 +177,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     if (navMenu && navMenu.classList.contains('menu-open')) {
       toggleMobileMenu();
-    }
-  };
-
-  // Handles scroll-to-top button visibility and header shadow
-  const handleScroll = () => {
-    if (header) {
-        header.classList.toggle('scrolled', window.scrollY > 20);
-    }
-    if (scrollToTopBtn) {
-      scrollToTopBtn.classList.toggle('visible', window.scrollY > 300);
     }
   };
 
@@ -418,7 +472,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
-  // --- Intersection Observer for Animations ---
+  // --- Intersection Observer for Fade-in Animations ---
   const observer = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
       if (entry.isIntersecting) {
@@ -492,14 +546,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  const combinedScrollHandler = () => {
-    handleScroll();
-    if (activeSpecItem) {
-        closeSpecPopup();
-    }
-  };
-
-  window.addEventListener('scroll', combinedScrollHandler, { passive: true });
+  window.addEventListener('scroll', handleScroll, { passive: true });
   document.addEventListener('mouseleave', handleExitIntent);
 
   // --- Initializations ---
@@ -510,6 +557,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   fetchAndInitTestimonials();
+  initScrollSpy();
 
   setTimeout(initMissionToast, 5000);
 });
