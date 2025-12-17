@@ -14,16 +14,20 @@ document.addEventListener('DOMContentLoaded', () => {
   const specItems = document.querySelectorAll('.specs-section .spec-item');
   const scrollToTopBtn = document.querySelector('#scroll-to-top');
   const newsletterForm = document.querySelector('#newsletter-form');
-  const offerBanner = document.querySelector('#offer-banner');
-  const offerCloseBtn = document.querySelector('#offer-close-btn');
-  const offerViewLaterBtn = document.querySelector('#offer-view-later-btn');
-  const offerClaimBtn = document.querySelector('.offer-claim-btn');
+  const copyrightYearEl = document.querySelector('#copyright-year');
+
+  // --- Mission Toast Selectors ---
+  const missionToast = document.querySelector('#mission-toast');
+  const missionCloseBtn = document.querySelector('#mission-close-btn');
+  const missionMinimizeBtn = document.querySelector('#mission-minimize-btn');
+  const missionMaximizeBtn = document.querySelector('#mission-maximize-btn');
+  const missionClaimBtn = document.querySelector('.mission-claim-btn');
   const hoursEl = document.querySelector('#hours');
   const minutesEl = document.querySelector('#minutes');
   const secondsEl = document.querySelector('#seconds');
-  const offerTitleEl = offerBanner ? offerBanner.querySelector('.offer-title') : null;
-  const offerTextEl = offerBanner ? offerBanner.querySelector('.offer-text') : null;
-  const copyrightYearEl = document.querySelector('#copyright-year');
+  const missionTitleEl = missionToast ? missionToast.querySelector('.mission-title') : null;
+  const missionTextEl = missionToast ? missionToast.querySelector('.mission-text') : null;
+  const progressRing = document.querySelector('.mission-progress-ring__circle');
 
   // --- Spec Pop-up Selectors ---
   const specPopupContainer = document.getElementById('spec-popup-container');
@@ -320,36 +324,55 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
-  // --- Offer Banner Functions ---
-  const hideOfferBanner = () => {
-    if (offerBanner) {
-      offerBanner.classList.remove('visible');
-    }
+  // --- Mission Toast Functions ---
+  const dismissMission = () => {
+    if (!missionToast) return;
+    missionToast.classList.remove('visible');
+    localStorage.setItem('missionState', 'dismissed');
+    if (countdownInterval) clearInterval(countdownInterval);
   };
 
-  const showOfferBanner = () => {
-    if (!offerBanner) return;
-    if (localStorage.getItem('offerBannerClosed') === 'true') return;
+  const minimizeMission = () => {
+    if (!missionToast) return;
+    missionToast.classList.add('minimized');
+    localStorage.setItem('missionState', 'minimized');
+  };
 
-    const viewLaterExpiry = localStorage.getItem('offerBannerViewLater');
-    if (viewLaterExpiry && Date.now() < parseInt(viewLaterExpiry, 10)) {
-        return;
-    } else if (viewLaterExpiry) {
-        localStorage.removeItem('offerBannerViewLater');
+  const maximizeMission = () => {
+    if (!missionToast) return;
+    missionToast.classList.remove('minimized');
+    localStorage.setItem('missionState', 'expanded');
+  };
+
+  const initMissionToast = () => {
+    if (!missionToast) return;
+    const missionState = localStorage.getItem('missionState');
+
+    if (missionState === 'dismissed' || localStorage.getItem('missionExpired') === 'true') {
+      return;
     }
 
-    if (localStorage.getItem('offerExpired') === 'true') return;
-
-    offerBanner.classList.add('visible');
+    missionToast.classList.add('visible');
+    if (missionState === 'minimized') {
+      missionToast.classList.add('minimized');
+    } else {
+      localStorage.setItem('missionState', 'expanded');
+    }
     startCountdown();
   };
 
   const startCountdown = () => {
-    if (!hoursEl || !minutesEl || !secondsEl || !offerClaimBtn || !offerTitleEl || !offerTextEl) return;
+    if (!hoursEl || !minutesEl || !secondsEl || !missionClaimBtn || !missionTitleEl || !missionTextEl || !progressRing) return;
     if (countdownInterval) clearInterval(countdownInterval);
+
+    const radius = progressRing.r.baseVal.value;
+    const circumference = 2 * Math.PI * radius;
+    progressRing.style.strokeDasharray = `${circumference} ${circumference}`;
+    progressRing.style.strokeDashoffset = circumference;
 
     let endOfDay = new Date();
     endOfDay.setHours(23, 59, 59, 999);
+    const totalSecondsInDay = 24 * 60 * 60;
 
     countdownInterval = setInterval(() => {
       const now = new Date();
@@ -361,30 +384,36 @@ document.addEventListener('DOMContentLoaded', () => {
         minutesEl.textContent = '00';
         secondsEl.textContent = '00';
         
-        offerTitleEl.innerHTML = '<i class="fas fa-exclamation-circle"></i> Offer Expired!';
-        offerTitleEl.style.color = 'var(--accent)';
-        offerTextEl.textContent = 'This flash sale has ended. Stay tuned for more great deals!';
-        offerClaimBtn.disabled = true;
-        offerClaimBtn.style.opacity = '0.6';
-        offerClaimBtn.style.cursor = 'not-allowed';
-        if (offerViewLaterBtn) offerViewLaterBtn.style.display = 'none';
-        localStorage.setItem('offerExpired', 'true');
+        missionTitleEl.innerHTML = '<i class="fas fa-exclamation-circle"></i> Mission Expired!';
+        missionTitleEl.style.color = 'var(--accent)';
+        missionTextEl.textContent = 'This mission has ended. Stay tuned for the next one!';
+        missionClaimBtn.disabled = true;
+        missionClaimBtn.style.opacity = '0.6';
+        missionClaimBtn.style.cursor = 'not-allowed';
+        if (missionMinimizeBtn) missionMinimizeBtn.style.display = 'none';
+        localStorage.setItem('missionExpired', 'true');
         return;
       }
 
-      const hours = Math.floor((timeLeft / (1000 * 60 * 60)) % 24);
+      const hours = Math.floor(timeLeft / (1000 * 60 * 60));
       const minutes = Math.floor((timeLeft / 1000 / 60) % 60);
       const seconds = Math.floor((timeLeft / 1000) % 60);
 
       hoursEl.textContent = String(hours).padStart(2, '0');
       minutesEl.textContent = String(minutes).padStart(2, '0');
       secondsEl.textContent = String(seconds).padStart(2, '0');
+
+      const secondsSinceStartOfDay = (now.getHours() * 3600) + (now.getMinutes() * 60) + now.getSeconds();
+      const progress = secondsSinceStartOfDay / totalSecondsInDay;
+      const offset = circumference - progress * circumference;
+      progressRing.style.strokeDashoffset = offset;
+
     }, 1000);
   };
 
   const handleExitIntent = (e) => {
-    if (e.clientY < 50 && !exitIntentTriggered && offerBanner && !offerBanner.classList.contains('visible') && localStorage.getItem('offerBannerClosed') !== 'true' && localStorage.getItem('offerExpired') !== 'true') {
-        showOfferBanner();
+    if (e.clientY < 50 && !exitIntentTriggered && missionToast && !missionToast.classList.contains('visible') && localStorage.getItem('missionState') !== 'dismissed' && localStorage.getItem('missionExpired') !== 'true') {
+        initMissionToast();
         exitIntentTriggered = true;
     }
   };
@@ -431,27 +460,14 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Offer Banner Listeners
-  if (offerCloseBtn) {
-    offerCloseBtn.addEventListener('click', () => {
-      hideOfferBanner();
-      localStorage.setItem('offerBannerClosed', 'true');
-      if (countdownInterval) clearInterval(countdownInterval);
-    });
-  }
-  if (offerViewLaterBtn) {
-    offerViewLaterBtn.addEventListener('click', () => {
-      hideOfferBanner();
-      localStorage.setItem('offerBannerViewLater', Date.now() + (2 * 60 * 60 * 1000));
-      if (countdownInterval) clearInterval(countdownInterval);
-    });
-  }
-  if (offerClaimBtn) {
-    offerClaimBtn.addEventListener('click', () => {
-        alert('Congratulations! Your flash sale discount has been applied!');
-        hideOfferBanner();
-        localStorage.setItem('offerBannerClosed', 'true');
-        if (countdownInterval) clearInterval(countdownInterval);
+  // Mission Toast Listeners
+  if (missionCloseBtn) missionCloseBtn.addEventListener('click', dismissMission);
+  if (missionMinimizeBtn) missionMinimizeBtn.addEventListener('click', minimizeMission);
+  if (missionMaximizeBtn) missionMaximizeBtn.addEventListener('click', maximizeMission);
+  if (missionClaimBtn) {
+    missionClaimBtn.addEventListener('click', () => {
+        alert('Mission Accepted! Your reward has been applied.');
+        dismissMission();
     });
   }
 
@@ -495,5 +511,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
   fetchAndInitTestimonials();
 
-  setTimeout(showOfferBanner, 5000);
+  setTimeout(initMissionToast, 5000);
 });
