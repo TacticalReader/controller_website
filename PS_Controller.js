@@ -52,7 +52,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const ergonomicCard = document.getElementById('ergonomic-card');
   const heatmapSvg = document.getElementById('controller-heatmap-svg');
   const heatmapTooltip = document.getElementById('heatmap-tooltip');
-  const contrastToggle = document.getElementById('heatmap-contrast-toggle');
 
   // --- State ---
   const controllerImages = {
@@ -543,7 +542,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // --- Ergonomic Heatmap Functions ---
   const initHeatmap = () => {
-      if (!ergonomicCard || !heatmapSvg || !heatmapTooltip || !contrastToggle) return;
+      if (!ergonomicCard || !heatmapSvg || !heatmapTooltip) return;
 
       const heatmapZones = heatmapSvg.querySelectorAll('path[data-tooltip]');
 
@@ -573,12 +572,6 @@ document.addEventListener('DOMContentLoaded', () => {
           zone.addEventListener('mouseleave', () => {
               heatmapTooltip.classList.remove('visible');
           });
-      });
-
-      contrastToggle.addEventListener('click', () => {
-          const isPressed = contrastToggle.getAttribute('aria-pressed') === 'true';
-          contrastToggle.setAttribute('aria-pressed', String(!isPressed));
-          heatmapSvg.classList.toggle('high-contrast');
       });
   };
 
