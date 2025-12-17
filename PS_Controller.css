@@ -557,10 +557,11 @@ INTERACTIVE COLOR SECTION
 }
 
 .interactive-image-container {
-    max-width: 480px;
-    min-width: 60px;
-    height: 360px; /* Set a fixed height to contain the image */
-    margin-bottom: 20px;
+    width: 90%;
+    max-width: 650px; /* Increased for larger screens */
+    min-width: 280px; /* A more sensible minimum */
+    aspect-ratio: 4 / 3; /* Replaces fixed height for responsiveness */
+    margin: 0 auto 20px; /* Center the container */
     position: relative;
     perspective: 1000px;
 }
