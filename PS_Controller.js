@@ -30,22 +30,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const specPopupTitle = document.getElementById('spec-popup-title');
   const specPopupDetails = document.getElementById('spec-popup-details');
 
-  // --- Testimonial Carousel Selectors ---
-  const testimonialContainer = document.querySelector('.testimonial-carousel-container');
-  const testimonialCards = document.querySelectorAll('.testimonial-card');
-  const testimonialDotsContainer = document.querySelector('.testimonial-dots');
-  const prevTestimonialBtn = document.querySelector('.testimonial-nav-btn.prev');
-  const nextTestimonialBtn = document.querySelector('.testimonial-nav-btn.next');
-
-  // --- Testimonial Modal Selectors ---
-  const modalOverlay = document.getElementById('testimonial-modal-overlay');
-  const modalContent = document.querySelector('.testimonial-modal-content');
-  const modalCloseBtn = document.getElementById('testimonial-modal-close-btn');
-  const modalAvatar = document.getElementById('modal-avatar');
-  const modalAuthorName = document.querySelector('#modal-author-details h3');
-  const modalAuthorTitle = document.querySelector('#modal-author-details span');
-  const modalRating = document.getElementById('modal-rating');
-  const modalQuote = document.getElementById('modal-quote');
+  // --- Wall of Victory Selectors ---
+  const victoryWallGrid = document.querySelector('.victory-wall-grid');
+  const loadMoreBtn = document.querySelector('#load-more-reviews');
 
   // --- Developer Modal Selectors ---
   const developerCreditsTrigger = document.querySelector('#developer-credits');
@@ -58,12 +45,11 @@ document.addEventListener('DOMContentLoaded', () => {
     white: './ps4-controller-png-42099.png',
     red: './ps4-controller-png-42109.png',
   };
-  let currentTestimonialIndex = 0;
-  let testimonialInterval;
+  let allTestimonials = [];
+  let currentTestimonialPage = 0;
+  const testimonialsPerPage = 6;
   let countdownInterval;
   let exitIntentTriggered = false;
-  let touchStartX = 0;
-  let touchEndX = 0;
   let activeSpecItem = null; // Track the currently active spec item for the pop-up
 
   // --- Functions ---
@@ -195,83 +181,93 @@ document.addEventListener('DOMContentLoaded', () => {
     activeSpecItem = null;
   };
 
-  // --- Testimonial Carousel Functions ---
-  const showTestimonial = (index) => {
-    if (testimonialCards.length === 0) return;
+  // --- Wall of Victory Functions ---
+  const createVictoryCard = (testimonial) => {
+      const card = document.createElement('div');
+      card.className = 'victory-card';
 
-    currentTestimonialIndex = (index + testimonialCards.length) % testimonialCards.length;
+      const ratingPercentage = (testimonial.rating / 5) * 100;
 
-    testimonialCards.forEach((card, i) => {
-        card.classList.toggle('active', i === currentTestimonialIndex);
-        card.setAttribute('aria-hidden', i !== currentTestimonialIndex);
-    });
-
-    if (testimonialDotsContainer) {
-        const dots = testimonialDotsContainer.children;
-        Array.from(dots).forEach((dot, i) => {
-            dot.classList.toggle('active', i === currentTestimonialIndex);
-            dot.setAttribute('aria-current', i === currentTestimonialIndex ? 'true' : 'false');
-        });
-    }
+      card.innerHTML = `
+          <div class="victory-card-header">
+              <img src="${testimonial.avatar}" alt="Avatar of ${testimonial.username}">
+              <div class="victory-user-info">
+                  <h4>${testimonial.username}</h4>
+                  <span>${testimonial.rank}</span>
+              </div>
+              ${testimonial.verified ? '<div class="verified-badge"><i class="fas fa-check-circle"></i> Verified</div>' : ''}
+          </div>
+          <div class="victory-card-body">
+              <blockquote>${testimonial.quote}</blockquote>
+          </div>
+          <div class="victory-card-footer">
+              <div class="player-stats">
+                  <i class="fas fa-clock"></i> Hours Played: ${testimonial.hoursPlayed}+
+              </div>
+              <div class="rating-bar-container" title="${testimonial.rating} out of 5 stars">
+                  <div class="rating-bar-fill" style="width: ${ratingPercentage}%;"></div>
+              </div>
+          </div>
+      `;
+      return card;
   };
 
-  const nextTestimonial = () => showTestimonial(currentTestimonialIndex + 1);
-  const prevTestimonial = () => showTestimonial(currentTestimonialIndex - 1);
+  const appendTestimonials = () => {
+      if (!victoryWallGrid) return;
 
-  const startTestimonialRotation = () => {
-    stopTestimonialRotation(); // Prevent multiple intervals
-    testimonialInterval = setInterval(nextTestimonial, 5000);
+      const startIndex = currentTestimonialPage * testimonialsPerPage;
+      const endIndex = startIndex + testimonialsPerPage;
+      const testimonialsToAppend = allTestimonials.slice(startIndex, endIndex);
+
+      if (testimonialsToAppend.length === 0 && currentTestimonialPage > 0) {
+          if (loadMoreBtn) loadMoreBtn.style.display = 'none'; // No more reviews
+          return;
+      }
+
+      testimonialsToAppend.forEach((testimonial, index) => {
+          const card = createVictoryCard(testimonial);
+          card.style.transitionDelay = `${index * 100}ms`;
+          victoryWallGrid.appendChild(card);
+          observer.observe(card);
+      });
+
+      currentTestimonialPage++;
+
+      if (endIndex >= allTestimonials.length) {
+          if (loadMoreBtn) loadMoreBtn.style.display = 'none';
+      }
   };
 
-  const stopTestimonialRotation = () => {
-    clearInterval(testimonialInterval);
+  const handleLoadMore = () => {
+      if (!loadMoreBtn) return;
+      const icon = loadMoreBtn.querySelector('i');
+      
+      loadMoreBtn.disabled = true;
+      if (icon) icon.classList.add('loading');
+
+      setTimeout(() => {
+          appendTestimonials();
+          loadMoreBtn.disabled = false;
+          if (icon) icon.classList.remove('loading');
+      }, 500);
   };
 
-  const resetTestimonialRotation = () => {
-    stopTestimonialRotation();
-    startTestimonialRotation();
-  };
-
-  const handleSwipe = () => {
-    if (touchEndX < touchStartX - 50) {
-        // Swiped left
-        nextTestimonial();
-        resetTestimonialRotation();
-    }
-    if (touchEndX > touchStartX + 50) {
-        // Swiped right
-        prevTestimonial();
-        resetTestimonialRotation();
-    }
-  };
-
-  // --- Testimonial Modal Functions ---
-  const openTestimonialModal = (index) => {
-    stopTestimonialRotation();
-    const card = testimonialCards[index];
-    if (!card || !modalOverlay) return;
-
-    const avatarSrc = card.querySelector('.testimonial-avatar img').src;
-    const authorName = card.querySelector('cite').textContent;
-    const authorTitle = card.querySelector('.author-title').textContent;
-    const ratingHTML = card.querySelector('.testimonial-rating').innerHTML;
-    const quoteText = card.querySelector('blockquote').textContent;
-
-    modalAvatar.src = avatarSrc;
-    modalAuthorName.textContent = authorName;
-    modalAuthorTitle.textContent = authorTitle;
-    modalRating.innerHTML = ratingHTML;
-    modalQuote.textContent = quoteText;
-
-    modalOverlay.classList.add('visible');
-    document.body.style.overflow = 'hidden';
-  };
-
-  const closeTestimonialModal = () => {
-    if (!modalOverlay) return;
-    modalOverlay.classList.remove('visible');
-    document.body.style.overflow = 'auto';
-    startTestimonialRotation();
+  const fetchAndInitTestimonials = async () => {
+      if (!victoryWallGrid) return;
+      try {
+          const response = await fetch('./data/testimonials.json');
+          if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+          allTestimonials = await response.json();
+          if (allTestimonials.length > 0) {
+            appendTestimonials();
+          } else {
+            if (loadMoreBtn) loadMoreBtn.style.display = 'none';
+          }
+      } catch (error) {
+          console.error('Failed to fetch testimonials:', error);
+          if (victoryWallGrid) victoryWallGrid.innerHTML = '<p style="color: white; text-align: center;">Could not load reviews at this time.</p>';
+          if (loadMoreBtn) loadMoreBtn.style.display = 'none';
+      }
   };
 
   // --- Developer Modal Functions ---
@@ -304,7 +300,7 @@ document.addEventListener('DOMContentLoaded', () => {
     input.setAttribute('aria-invalid', 'false');
 
     const email = input.value.trim();
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const emailRegex = /^[^ \s@]+@[^ \s@]+\.[^ \s@]+$/;
 
     if (email && emailRegex.test(email)) {
       form.classList.add('subscribed');
@@ -422,6 +418,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (scrollToTopBtn) scrollToTopBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
   if (newsletterForm) newsletterForm.addEventListener('submit', handleNewsletterSubmit);
+  if (loadMoreBtn) loadMoreBtn.addEventListener('click', handleLoadMore);
 
   // Spec Item Pop-up Listeners
   specItems.forEach(item => {
@@ -458,45 +455,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Testimonial Carousel Listeners
-  if (testimonialContainer) {
-    if (nextTestimonialBtn) {
-        nextTestimonialBtn.addEventListener('click', () => {
-            nextTestimonial();
-            resetTestimonialRotation();
-        });
-    }
-    if (prevTestimonialBtn) {
-        prevTestimonialBtn.addEventListener('click', () => {
-            prevTestimonial();
-            resetTestimonialRotation();
-        });
-    }
-    testimonialContainer.addEventListener('mouseenter', stopTestimonialRotation);
-    testimonialContainer.addEventListener('mouseleave', startTestimonialRotation);
-
-    // Swipe listeners
-    testimonialContainer.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; }, { passive: true });
-    testimonialContainer.addEventListener('touchend', e => {
-        touchEndX = e.changedTouches[0].screenX;
-        handleSwipe();
-    });
-  }
-
-  // Testimonial Modal Listeners
-  testimonialCards.forEach((card, index) => {
-    card.addEventListener('click', () => openTestimonialModal(index));
-    card.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            openTestimonialModal(index);
-        }
-    });
-  });
-
-  if (modalCloseBtn) modalCloseBtn.addEventListener('click', closeTestimonialModal);
-  if (modalOverlay) modalOverlay.addEventListener('click', (e) => e.target === modalOverlay && closeTestimonialModal());
-
   // Developer Modal Listeners
   if (developerCreditsTrigger) developerCreditsTrigger.addEventListener('click', openDeveloperModal);
   if (developerModalCloseBtn) developerModalCloseBtn.addEventListener('click', closeDeveloperModal);
@@ -506,7 +464,6 @@ document.addEventListener('DOMContentLoaded', () => {
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
       if (loginContainer && loginContainer.classList.contains('visible')) toggleLoginModal();
-      if (modalOverlay && modalOverlay.classList.contains('visible')) closeTestimonialModal();
       if (developerModalOverlay && developerModalOverlay.classList.contains('visible')) closeDeveloperModal();
       if (activeSpecItem) closeSpecPopup();
     }
@@ -536,20 +493,7 @@ document.addEventListener('DOMContentLoaded', () => {
     copyrightYearEl.textContent = new Date().getFullYear();
   }
 
-  if (testimonialCards.length > 0 && testimonialDotsContainer) {
-    testimonialCards.forEach((_, index) => {
-        const dot = document.createElement('button');
-        dot.classList.add('testimonial-dot');
-        dot.setAttribute('aria-label', `Go to testimonial ${index + 1}`);
-        dot.addEventListener('click', () => {
-            showTestimonial(index);
-            resetTestimonialRotation();
-        });
-        testimonialDotsContainer.appendChild(dot);
-    });
-    showTestimonial(0);
-    startTestimonialRotation();
-  }
+  fetchAndInitTestimonials();
 
   setTimeout(showOfferBanner, 5000);
 });
