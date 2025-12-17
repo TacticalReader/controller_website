@@ -47,6 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const developerCreditsTrigger = document.querySelector('#developer-credits');
   const developerModalOverlay = document.getElementById('developer-modal-overlay');
   const developerModalCloseBtn = document.getElementById('developer-modal-close-btn');
+  const developerCardsContainer = document.querySelector('.developer-cards-container');
 
   // --- Heatmap Selectors ---
   const ergonomicCard = document.getElementById('ergonomic-card');
@@ -397,16 +398,135 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   // --- Developer Modal Functions ---
+  const getSkeletonLoaderHTML = () => {
+    return Array(3).fill('').map(() => `
+        <div class="skeleton-card">
+            <div class="skeleton-avatar"></div>
+            <div class="skeleton-text">
+                <div class="name"></div>
+                <div class="stats"></div>
+            </div>
+        </div>
+    `).join('');
+  };
+
+  const getSimulatedStatus = (contributions) => {
+    const rand = Math.random();
+    if (contributions > 50 && rand < 0.5) return { className: 'online', text: 'Online' }; // High contributors more likely online
+    if (rand < 0.2) return { className: 'online', text: 'Online' };
+    if (rand < 0.7) return { className: 'away', text: 'Away' };
+    return { className: 'offline', text: 'Offline' };
+  };
+
+  const createContributorCardHTML = (contributor) => {
+    return `
+      <div class="developer-card">
+        <img src="${contributor.avatar_url}" alt="Avatar for ${contributor.login}">
+        <div class="developer-info">
+          <h4>
+            <span class="status-dot ${contributor.status.className}" title="${contributor.status.text}"></span>
+            ${contributor.login}
+          </h4>
+          <div class="developer-stats">
+            <i class="fas fa-fire"></i> Contributions: ${contributor.contributions}
+          </div>
+        </div>
+        <div class="developer-link">
+          <a href="${contributor.html_url}" target="_blank" rel="noopener noreferrer" aria-label="View ${contributor.login}'s GitHub profile">
+            <i class="fab fa-github"></i>
+          </a>
+        </div>
+      </div>
+    `;
+  };
+
+  const renderContributors = (contributors) => {
+    if (!developerCardsContainer) return;
+    setTimeout(() => {
+        developerCardsContainer.innerHTML = contributors.map(createContributorCardHTML).join('');
+    }, 300); // Wait for boot-up animation
+  };
+
+  const getFallbackData = () => {
+    return [
+      {
+        login: 'TacticalReader',
+        avatar_url: 'https://avatars.githubusercontent.com/u/583231?v=4',
+        html_url: 'https://github.com/TacticalReader',
+        contributions: '100+',
+        status: { className: 'online', text: 'Online (Fallback)' }
+      },
+      {
+        login: 'ErrorBot',
+        avatar_url: 'https://i.pravatar.cc/150?u=error',
+        html_url: '#',
+        contributions: '0',
+        status: { className: 'offline', text: 'API Error' }
+      }
+    ];
+  };
+
+  const fetchContributors = async () => {
+    if (!developerCardsContainer) return;
+    developerCardsContainer.innerHTML = getSkeletonLoaderHTML();
+
+    const cacheKey = 'github_contributors';
+    const cachedData = localStorage.getItem(cacheKey);
+    const now = new Date().getTime();
+
+    if (cachedData) {
+        const { timestamp, data } = JSON.parse(cachedData);
+        if (now - timestamp < 3600 * 1000) { // 1 hour cache
+            renderContributors(data);
+            return;
+        }
+    }
+
+    try {
+        const response = await fetch('https://api.github.com/repos/TacticalReader/controller_website/contributors');
+        if (!response.ok) throw new Error(`GitHub API error: ${response.status}`);
+        const contributors = await response.json();
+        const contributorsWithStatus = contributors.map(c => ({ ...c, status: getSimulatedStatus(c.contributions) }));
+        localStorage.setItem(cacheKey, JSON.stringify({ timestamp: now, data: contributorsWithStatus }));
+        renderContributors(contributorsWithStatus);
+    } catch (error) {
+        console.error("Failed to fetch contributors:", error);
+        renderContributors(getFallbackData());
+    }
+  };
+
   const openDeveloperModal = () => {
     if (!developerModalOverlay) return;
-    developerModalOverlay.classList.add('visible');
-    document.body.classList.add('no-scroll');
+    requestAnimationFrame(() => {
+        developerModalOverlay.classList.add('visible');
+        document.body.classList.add('no-scroll');
+        fetchContributors();
+    });
+
+    const modalContent = developerModalOverlay.querySelector('.developer-modal-content');
+    if (modalContent) {
+        modalContent.addEventListener('animationend', () => {
+            if (developerModalCloseBtn) developerModalCloseBtn.focus();
+        }, { once: true });
+    }
   };
 
   const closeDeveloperModal = () => {
     if (!developerModalOverlay) return;
-    developerModalOverlay.classList.remove('visible');
-    document.body.classList.remove('no-scroll');
+    developerModalOverlay.classList.add('closing');
+
+    const modalContent = developerModalOverlay.querySelector('.developer-modal-content');
+    const onAnimationEnd = () => {
+        developerModalOverlay.classList.remove('visible', 'closing');
+        document.body.classList.remove('no-scroll');
+        if (developerCardsContainer) developerCardsContainer.innerHTML = getSkeletonLoaderHTML();
+    };
+
+    if (modalContent) {
+        modalContent.addEventListener('animationend', onAnimationEnd, { once: true });
+    } else {
+        setTimeout(onAnimationEnd, 400); // Fallback
+    }
   };
 
   // Handles newsletter form submission
