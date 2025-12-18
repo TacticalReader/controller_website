@@ -938,7 +938,18 @@ DEVELOPER PROFILE MODAL
 }
 
 @keyframes boot-up {
-    to { clip-path: inset(0% 0% 0% 0%); }
+    0% {
+        clip-path: inset(50% 0% 50% 0%);
+        filter: blur(5px);
+    }
+    50% {
+        text-shadow: -3px 0 var(--accent), 3px 0 var(--hud-accent);
+    }
+    to {
+        clip-path: inset(0% 0% 0% 0%);
+        filter: blur(0);
+        text-shadow: none;
+    }
 }
 
 @keyframes boot-up-exit {
@@ -1015,7 +1026,7 @@ DEVELOPER PROFILE MODAL
 }
 
 #developer-modal-overlay.visible .developer-modal-content {
-    animation: boot-up 300ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    animation: boot-up 400ms cubic-bezier(0.4, 0, 0.2, 1) 100ms forwards;
 }
 
 #developer-modal-overlay.closing .developer-modal-content {
@@ -1143,6 +1154,26 @@ DEVELOPER PROFILE MODAL
     margin-right: 5px;
     color: var(--hud-accent);
 }
+
+.contribution-graph {
+    display: flex;
+    gap: 3px;
+    margin-top: 8px;
+    align-items: flex-end;
+    height: 24px;
+}
+
+.graph-bar {
+    width: 10px;
+    background-color: rgba(100, 255, 218, 0.2);
+    border-radius: 2px;
+    transition: height 0.5s ease-out;
+}
+
+.graph-bar[data-level="1"] { background-color: #0e4429; }
+.graph-bar[data-level="2"] { background-color: #006d32; }
+.graph-bar[data-level="3"] { background-color: #26a641; }
+.graph-bar[data-level="4"] { background-color: #39d353; }
 
 .developer-link a {
     color: var(--hud-accent);
