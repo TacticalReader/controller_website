@@ -410,29 +410,61 @@ document.addEventListener('DOMContentLoaded', () => {
     `).join('');
   };
 
-  const getSimulatedStatus = (contributions) => {
-    const rand = Math.random();
-    if (contributions > 50 && rand < 0.5) return { className: 'online', text: 'Online' }; // High contributors more likely online
-    if (rand < 0.2) return { className: 'online', text: 'Online' };
-    if (rand < 0.7) return { className: 'away', text: 'Away' };
-    return { className: 'offline', text: 'Offline' };
+  const getCommitStatus = (authorLogin, lastCommitMap) => {
+      const lastCommitDate = lastCommitMap[authorLogin];
+      if (!lastCommitDate) {
+          return { className: 'offline', text: 'Offline' };
+      }
+
+      const now = new Date();
+      const commitDate = new Date(lastCommitDate);
+      const diffHours = (now - commitDate) / (1000 * 60 * 60);
+
+      if (diffHours <= 24) {
+          return { className: 'online', text: 'Active in last 24 hours' };
+      }
+      if (diffHours <= 24 * 7) {
+          return { className: 'away', text: 'Active in last week' };
+      }
+      return { className: 'offline', text: 'Offline' };
+  };
+
+  const createContributionGraphHTML = (weeks) => {
+      if (!weeks || weeks.length === 0) return '';
+      const last12Weeks = weeks.slice(-12); // Get last 12 weeks
+      const maxCommits = Math.max(...last12Weeks.map(w => w.c), 1); // Avoid division by zero
+
+      const bars = last12Weeks.map(week => {
+          const commitCount = week.c;
+          const height = Math.max(5, (commitCount / maxCommits) * 100); // min height of 5%
+          let level = 0;
+          if (commitCount > 0) level = 1;
+          if (commitCount > maxCommits * 0.25) level = 2;
+          if (commitCount > maxCommits * 0.5) level = 3;
+          if (commitCount > maxCommits * 0.75) level = 4;
+          
+          return `<div class="graph-bar" style="height: ${height}%;" data-level="${level}" title="Week of ${new Date(week.w * 1000).toLocaleDateString()}: ${commitCount} commits"></div>`;
+      }).join('');
+
+      return `<div class="contribution-graph" aria-label="Contribution activity over the last 12 weeks">${bars}</div>`;
   };
 
   const createContributorCardHTML = (contributor) => {
     return `
       <div class="developer-card">
-        <img src="${contributor.avatar_url}" alt="Avatar for ${contributor.login}">
+        <img src="${contributor.author.avatar_url}" alt="Avatar for ${contributor.author.login}">
         <div class="developer-info">
           <h4>
             <span class="status-dot ${contributor.status.className}" title="${contributor.status.text}"></span>
-            ${contributor.login}
+            ${contributor.author.login}
           </h4>
           <div class="developer-stats">
-            <i class="fas fa-fire"></i> Contributions: ${contributor.contributions}
+            <i class="fas fa-fire"></i> Contributions: ${contributor.total}
           </div>
+          ${createContributionGraphHTML(contributor.weeks)}
         </div>
         <div class="developer-link">
-          <a href="${contributor.html_url}" target="_blank" rel="noopener noreferrer" aria-label="View ${contributor.login}'s GitHub profile">
+          <a href="${contributor.author.html_url}" target="_blank" rel="noopener noreferrer" aria-label="View ${contributor.author.login}'s GitHub profile">
             <i class="fab fa-github"></i>
           </a>
         </div>
@@ -450,17 +482,23 @@ document.addEventListener('DOMContentLoaded', () => {
   const getFallbackData = () => {
     return [
       {
-        login: 'TacticalReader',
-        avatar_url: 'https://avatars.githubusercontent.com/u/583231?v=4',
-        html_url: 'https://github.com/TacticalReader',
-        contributions: '100+',
+        author: {
+          login: 'TacticalReader',
+          avatar_url: 'https://avatars.githubusercontent.com/u/583231?v=4',
+          html_url: 'https://github.com/TacticalReader',
+        },
+        total: '100+',
+        weeks: [], // No graph for fallback
         status: { className: 'online', text: 'Online (Fallback)' }
       },
       {
-        login: 'ErrorBot',
-        avatar_url: 'https://i.pravatar.cc/150?u=error',
-        html_url: '#',
-        contributions: '0',
+        author: {
+          login: 'ErrorBot',
+          avatar_url: 'https://i.pravatar.cc/150?u=error',
+          html_url: '#',
+        },
+        total: '0',
+        weeks: [],
         status: { className: 'offline', text: 'API Error' }
       }
     ];
@@ -470,7 +508,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!developerCardsContainer) return;
     developerCardsContainer.innerHTML = getSkeletonLoaderHTML();
 
-    const cacheKey = 'github_contributors';
+    const cacheKey = 'github_contributors_v2';
     const cachedData = localStorage.getItem(cacheKey);
     const now = new Date().getTime();
 
@@ -483,12 +521,46 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     try {
-        const response = await fetch('https://api.github.com/repos/TacticalReader/controller_website/contributors');
-        if (!response.ok) throw new Error(`GitHub API error: ${response.status}`);
-        const contributors = await response.json();
-        const contributorsWithStatus = contributors.map(c => ({ ...c, status: getSimulatedStatus(c.contributions) }));
-        localStorage.setItem(cacheKey, JSON.stringify({ timestamp: now, data: contributorsWithStatus }));
-        renderContributors(contributorsWithStatus);
+        const [statsResponse, commitsResponse] = await Promise.all([
+            fetch('https://api.github.com/repos/TacticalReader/controller_website/stats/contributors'),
+            fetch('https://api.github.com/repos/TacticalReader/controller_website/commits?per_page=100')
+        ]);
+
+        if (!statsResponse.ok || !commitsResponse.ok) {
+            throw new Error(`GitHub API error: Stats ${statsResponse.status}, Commits ${commitsResponse.status}`);
+        }
+
+        if (statsResponse.status === 202) {
+            developerCardsContainer.innerHTML = `<p style="color: var(--hud-text);">Calculating contributor stats... please try again in a moment.</p>`;
+            setTimeout(fetchContributors, 5000);
+            return;
+        }
+
+        const contributorsStats = await statsResponse.json();
+        const commits = await commitsResponse.json();
+
+        const lastCommitMap = {};
+        commits.forEach(commit => {
+            if (commit.author && commit.author.login) {
+                const login = commit.author.login;
+                const commitDate = commit.commit.author.date;
+                if (!lastCommitMap[login] || new Date(commitDate) > new Date(lastCommitMap[login])) {
+                    lastCommitMap[login] = commitDate;
+                }
+            }
+        });
+
+        const processedContributors = contributorsStats.map(contributor => {
+            const login = contributor.author.login;
+            return {
+                ...contributor,
+                status: getCommitStatus(login, lastCommitMap)
+            };
+        }).sort((a, b) => b.total - a.total);
+
+        localStorage.setItem(cacheKey, JSON.stringify({ timestamp: now, data: processedContributors }));
+        renderContributors(processedContributors);
+
     } catch (error) {
         console.error("Failed to fetch contributors:", error);
         renderContributors(getFallbackData());
