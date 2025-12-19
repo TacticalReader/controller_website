@@ -469,7 +469,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const createContributorCardHTML = (contributor) => {
     const linkHTML = contributor.latestCommitUrl
-        ? `<a href="${contributor.latestCommitUrl}" target="_blank" rel="noopener noreferrer" class="developer-cta">View Loadout</a>`
+        ? `<a href="${contributor.latestCommitUrl}" target="_blank" rel="noopener noreferrer" class="developer-cta"><i class="fab fa-github"></i> View Loadout</a>`
         : `<a href="${contributor.author.html_url}" target="_blank" rel="noopener noreferrer" class="developer-cta" aria-label="View ${contributor.author.login}'s GitHub profile"><i class="fab fa-github"></i> View Profile</a>`;
 
     return `
