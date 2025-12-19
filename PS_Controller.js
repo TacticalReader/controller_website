@@ -72,6 +72,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // --- Functions ---
 
+  // Converts a date into a human-readable string like "2 hours ago"
+  const timeAgo = (date) => {
+    if (!date) return '';
+    const seconds = Math.floor((new Date() - new Date(date)) / 1000);
+    let interval = seconds / 31536000;
+    if (interval > 1) return Math.floor(interval) + " years ago";
+    interval = seconds / 2592000;
+    if (interval > 1) return Math.floor(interval) + " months ago";
+    interval = seconds / 86400;
+    if (interval > 1) return Math.floor(interval) + " days ago";
+    interval = seconds / 3600;
+    if (interval > 1) return Math.floor(interval) + " hours ago";
+    interval = seconds / 60;
+    if (interval > 1) return Math.floor(interval) + " minutes ago";
+    return Math.floor(seconds) + " seconds ago";
+  };
+
   // Handles scroll-based UI changes: progress bar, header visibility, scroll-to-top button
   const handleScroll = () => {
     const currentScrollY = window.scrollY;
@@ -411,22 +428,23 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   const getCommitStatus = (authorLogin, lastCommitMap) => {
-      const lastCommitDate = lastCommitMap[authorLogin];
-      if (!lastCommitDate) {
-          return { className: 'offline', text: 'Offline' };
+      const lastCommit = lastCommitMap[authorLogin];
+      if (!lastCommit) {
+          return { className: 'offline', text: 'Offline', timeAgoString: 'No recent commits' };
       }
 
       const now = new Date();
-      const commitDate = new Date(lastCommitDate);
+      const commitDate = new Date(lastCommit.date);
       const diffHours = (now - commitDate) / (1000 * 60 * 60);
+      const timeAgoString = `Last commit: ${timeAgo(commitDate)}`;
 
       if (diffHours <= 24) {
-          return { className: 'online', text: 'Active in last 24 hours' };
+          return { className: 'online', text: 'Active in last 24 hours', timeAgoString };
       }
       if (diffHours <= 24 * 7) {
-          return { className: 'away', text: 'Active in last week' };
+          return { className: 'away', text: 'Active in last week', timeAgoString };
       }
-      return { className: 'offline', text: 'Offline' };
+      return { className: 'offline', text: 'Offline', timeAgoString };
   };
 
   const createContributionGraphHTML = (weeks) => {
@@ -450,6 +468,10 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   const createContributorCardHTML = (contributor) => {
+    const linkHTML = contributor.latestCommitUrl
+        ? `<a href="${contributor.latestCommitUrl}" target="_blank" rel="noopener noreferrer" class="developer-cta">View Loadout</a>`
+        : `<a href="${contributor.author.html_url}" target="_blank" rel="noopener noreferrer" class="developer-cta" aria-label="View ${contributor.author.login}'s GitHub profile"><i class="fab fa-github"></i> View Profile</a>`;
+
     return `
       <div class="developer-card">
         <img src="${contributor.author.avatar_url}" alt="Avatar for ${contributor.author.login}">
@@ -459,14 +481,12 @@ document.addEventListener('DOMContentLoaded', () => {
             ${contributor.author.login}
           </h4>
           <div class="developer-stats">
-            <i class="fas fa-fire"></i> Contributions: ${contributor.total}
+            <i class="fas fa-history"></i> ${contributor.status.timeAgoString}
           </div>
           ${createContributionGraphHTML(contributor.weeks)}
         </div>
         <div class="developer-link">
-          <a href="${contributor.author.html_url}" target="_blank" rel="noopener noreferrer" aria-label="View ${contributor.author.login}'s GitHub profile">
-            <i class="fab fa-github"></i>
-          </a>
+          ${linkHTML}
         </div>
       </div>
     `;
@@ -489,7 +509,8 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         total: '100+',
         weeks: [], // No graph for fallback
-        status: { className: 'online', text: 'Online (Fallback)' }
+        status: { className: 'online', text: 'Online (Fallback)', timeAgoString: 'Last commit: just now' },
+        latestCommitUrl: 'https://github.com/TacticalReader/controller_website'
       },
       {
         author: {
@@ -499,7 +520,8 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         total: '0',
         weeks: [],
-        status: { className: 'offline', text: 'API Error' }
+        status: { className: 'offline', text: 'API Error', timeAgoString: 'Could not fetch commit data' },
+        latestCommitUrl: null
       }
     ];
   };
@@ -508,7 +530,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!developerCardsContainer) return;
     developerCardsContainer.innerHTML = getSkeletonLoaderHTML();
 
-    const cacheKey = 'github_contributors_v2';
+    const cacheKey = 'github_contributors_v3'; // Incremented cache key
     const cachedData = localStorage.getItem(cacheKey);
     const now = new Date().getTime();
 
@@ -544,17 +566,22 @@ document.addEventListener('DOMContentLoaded', () => {
             if (commit.author && commit.author.login) {
                 const login = commit.author.login;
                 const commitDate = commit.commit.author.date;
-                if (!lastCommitMap[login] || new Date(commitDate) > new Date(lastCommitMap[login])) {
-                    lastCommitMap[login] = commitDate;
+                if (!lastCommitMap[login] || new Date(commitDate) > new Date(lastCommitMap[login].date)) {
+                    lastCommitMap[login] = {
+                        date: commitDate,
+                        url: commit.html_url
+                    };
                 }
             }
         });
 
         const processedContributors = contributorsStats.map(contributor => {
             const login = contributor.author.login;
+            const lastCommit = lastCommitMap[login];
             return {
                 ...contributor,
-                status: getCommitStatus(login, lastCommitMap)
+                status: getCommitStatus(login, lastCommitMap),
+                latestCommitUrl: lastCommit ? lastCommit.url : null
             };
         }).sort((a, b) => b.total - a.total);
 
