@@ -1228,6 +1228,10 @@ DEVELOPER PROFILE MODAL
     color: var(--hud-bg);
 }
 
+.developer-link .developer-cta i {
+    margin-right: 8px;
+}
+
 /* Skeleton Loader */
 .skeleton-card {
     display: flex;
